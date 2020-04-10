@@ -4,7 +4,7 @@ import cell
 
 
 class Board:
-    """Incapsulate board storage and move initialisation"""
+    """Incapsulate cell storage and move initialisation"""
 
     def __init__(self,
                  board: typing.List[typing.List[typing.List[cell.Cell]]]):
