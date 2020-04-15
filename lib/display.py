@@ -1,4 +1,3 @@
-from __future__ import annotations
 from abc import ABC, abstractmethod
 import os
 
@@ -32,10 +31,18 @@ class ConsoleDisplay(Display):
             os.system('cls')
 
     def menu(self):
-        print("{0:=^80}".format("Welcome to MazeRunners!"))
+        print("{:=^80}".format("Welcome to MazeRunners!"))
         print("{:<80}".format("1 Play"))
         print("{:<80}".format("2 Add map"))
         print("{:<80}".format("3 Exit"))
 
     def message(self, message: str):
         print("{0:^80}".format(message))
+
+    def help(self):
+        print("{:<80".format("DESTINATION - {LEFT, RIGHT, UP, DOWN"))
+        print("{:<80".format("to shoot - shoot DESTINATION"))
+        print("{:<80".format("to move - move DESTINATION"))
+        print("{:<80".format("to check backpack - backpack"))
+        print("{:<80".format("to check statement - statement"))
+        print("{:<80".format("to end phase - end"))

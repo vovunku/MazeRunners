@@ -1,6 +1,4 @@
-from __future__ import annotations
 from abc import ABC, abstractmethod
-import typing
 import sys
 
 
@@ -11,7 +9,11 @@ class Receiver(ABC):
         self.type = "Abstract"
 
     @abstractmethod
-    def handle_string(self):
+    def handle_command(self):
+        pass
+
+    @abstractmethod
+    def read_map_file(self, filename):
         pass
 
 
@@ -21,6 +23,13 @@ class SimpleConsoleReceiver(Receiver):
     def __int__(self):
         self.type = "Console"
 
-    def handle_string(self) -> typing.List[str, ...]:
+    def handle_command(self):
         inp = sys.stdin.readline().strip()
         return tuple(inp.split(" "))
+
+    def read_map_file(self, filename):
+        ans_map = []
+        with open(filename, 'r') as file:
+            for line in file:
+                ans_map.append(line.strip())
+        return ans_map

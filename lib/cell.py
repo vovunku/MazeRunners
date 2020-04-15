@@ -1,11 +1,15 @@
 class Cell:
-    def __init__(self):
-        self._left_is_free = False
-        self._right_is_free = False
-        self._up_is_free = False
-        self._down_is_free = False
+    def __init__(self, items=None, **kwargs):
+        if items is None:
+            items = []
+        self.left = kwargs.get("left", None)
+        self.right = kwargs.get("right", None)
+        self.up = kwargs.get("up", None)
+        self.down = kwargs.get("down", None)
         self._storage = []
-        self._type = "Empty"
+        self.lay = kwargs.get("lay", 0)
+        self.x = kwargs.get("x", 0)
+        self.y = kwargs.get("y", 0)
 
     def activate(self, user):
         pass
@@ -24,51 +28,105 @@ class Cell:
     def move(self, user):
         ToDo
 
+    def set_neighbour(self, **kwargs):
+        self.left = kwargs.get("left", None)
+        self.right = kwargs.get("right", None)
+        self.up = kwargs.get("up", None)
+        self.down = kwargs.get("down", None)
 
-class StunCell(Cell):
-    def __init__(self, stun_duration):
+    def __repr__(self):
+        return self.type[:2]
+
+    def set_coords(self, lay, x, y):
+        self.lay = lay
+        self.x = x
+        self.y = y
+
+    def get_coord(self):
+        return [self.lay, self.x, self.y]
+
+    def show_accessible(self):
+        ans = []
+        if self.left is not None:
+            ans.append(self.left)
+        if self.right is not None:
+            ans.append(self.right)
+        if self.up is not None:
+            ans.append(self.up)
+        if self.down is not None:
+            ans.append(self.down)
+        return ans
+
+
+class Empty(Cell):
+    def __init__(self):
         super().__init__()
-        self._stun_duration = stun_duration
-        self._type = "Stun"
+        self.type = "Empty"
+
+
+class Stun(Cell):
+    def __init__(self, stun_duration, items=None, **kwargs):
+        super().__init__(items, **kwargs)
+        if items is None:
+            items = []
+        self.stun_duration = stun_duration
+        self.type = "Stun"
 
     def activate(self, user):
         ToDo
 
 
-class RubberCell(Cell):
-    def __init__(self, exit_destination):
-        super().__init__()
-        self._exit_destination = exit_destination
-        self._type = "RubberRoom"
+class RubberRoom(Cell):
+    def __init__(self, exit_destination, items=None, **kwargs):
+        super().__init__(items, **kwargs)
+        if items is None:
+            items = []
+        self.exit_destination = exit_destination
+        self.type = "RubberRoom"
 
     def move(self, user):
         ToDo
 
 
-class TeleportCell(Cell):
-    def __init__(self, shift_destination):
-        super().__init__()
-        self._shift_destination = shift_destination
-        self._type = "Teleport"
+class Teleport(Cell):
+    def __init__(self, shift_destination, items=None, **kwargs):
+        super().__init__(items, **kwargs)
+        if items is None:
+            items = []
+        self.shift_destination = shift_destination
+        self.type = "Teleport"
+
+    def show_accessible(self):
+        ans = super().show_accessible()
+        ans.append(self.shift_destination)
+        return ans
+
+    def set_shift_destination(self, shift_destination):
+        self.shift_destination = shift_destination
 
     def activate(self, user):
         ToDo
 
 
-class ArmoryCell(Cell):
-    def __init__(self):
-        super().__init__()
-        self._type = "Armory"
+class Armory(Cell):
+    def __init__(self, ammunition=3, items=None, **kwargs):
+        super().__init__(items, **kwargs)
+        if items is None:
+            items = []
+        self.type = "Armory"
+        self.ammunition = ammunition
 
     def activate(self, user):
         ToDo
 
 
-class ExitCell(Cell):
-    def __init__(self, exit_destination):
-        super().__init__()
-        self._exit_destination = exit_destination
-        self._type = "Exit"
+class Exit(Cell):
+    def __init__(self, exit_destination, items=None, **kwargs):
+        super().__init__(items, **kwargs)
+        if items is None:
+            items = []
+        self.exit_destination = exit_destination
+        self.type = "Exit"
 
     def move(self, user):
         ToDo
