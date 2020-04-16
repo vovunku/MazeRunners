@@ -25,7 +25,7 @@ class SimpleConsoleReceiver(Receiver):
 
     def handle_command(self):
         inp = sys.stdin.readline().strip()
-        return tuple(inp.split(" "))
+        return list(inp.split(" "))
 
     def read_map_file(self, filename):
         ans_map = []
