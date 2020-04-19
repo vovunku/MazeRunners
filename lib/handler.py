@@ -40,7 +40,7 @@ class AskingHandler(BaseGameHandler):
         self.player_id = player_id
         self.display.message(self.message)
         while True:
-            inp = self.receiver.handle_command()
+            inp = self.receiver.handle_string()
             if "end" in set(inp):
                 break
             if not self.executor.is_asking(inp):
@@ -59,7 +59,7 @@ class ActHandler(BaseGameHandler):
         self.display.message(self.message)
         move_count = 1
         while True:
-            inp = self.receiver.handle_command()
+            inp = self.receiver.handle_string()
             if self.executor.is_asking(inp):
                 pass
             elif "move" in set(inp) and move_count > 0:
@@ -80,7 +80,7 @@ class ActivateHandler(BaseGameHandler):
         self.player_id = player_id
         self.display.message(self.message)
         while True:
-            inp = self.receiver.handle_command()
+            inp = self.receiver.handle_string()
             if self.executor.is_asking(inp):
                 pass
             elif "collect" in set(inp):

@@ -1,16 +1,24 @@
-import cell
-import receiver
+import lib.cell as cell
 from queue import Queue
 
 
 class MapEditor:
     """Module between map manager and other modules"""
 
-    def __init__(self, receiver):
+    def __init__(self, receiver, display, map_manager):
         self.receiver = receiver
+        self.display = display
+        self.map_manager = map_manager
+
+    def read_map_file(self, filename):
+        ans_map = []
+        with open(filename, 'r') as file:
+            for line in file:
+                ans_map.append(line.strip())
+        return ans_map
 
     def add_map(self, filename):
-        raw_map = self.receiver.read_map_file(filename, filename)  # ?????????
+        raw_map = self.read_map_file(filename)
         maps_count = int(raw_map[0])
         types_gen = self.get_types(raw_map)
         file_it = 1
@@ -58,8 +66,8 @@ class MapEditor:
 
         for shift in shift_for_teleports:
             (board[shift[0][0]]
-                  [shift[0][1]]
-                  [shift[0][2]]).set_shift_destination(board[shift[1][0]]
+            [shift[0][1]]
+            [shift[0][2]]).set_shift_destination(board[shift[1][0]]
                                                  [shift[1][1]]
                                                  [shift[1][2]])
 
@@ -147,13 +155,7 @@ class MapEditor:
                         return problematic_cell
         return None
 
-
-receiv = receiver.SimpleConsoleReceiver
-editor = MapEditor(receiv)
-mapka = (editor.add_map("/home/vovun/PycharmProjects/MazeRunners/maps/first_test.txt"))
-for i in mapka:
-    for j in i:
-        for cell in j:
-            print(cell.left, cell.right, cell.up, cell.down, end="|")
-        print()
-print(mapka[0][1][1].shift_destination)
+    def choose_map(self):
+        self.display.map_list(self.map_manager.get_map_list)
+        inp = self.receiver.handle_string()
+        

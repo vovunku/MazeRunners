@@ -40,9 +40,11 @@ class ConsoleDisplay(Display):
         print("{0:^80}".format(message))
 
     def help(self):
-        print("{:<80".format("DESTINATION - {LEFT, RIGHT, UP, DOWN"))
-        print("{:<80".format("to shoot - shoot DESTINATION"))
-        print("{:<80".format("to move - move DESTINATION"))
-        print("{:<80".format("to check backpack - backpack"))
-        print("{:<80".format("to check statement - statement"))
-        print("{:<80".format("to end phase - end"))
+        print("{:<80}".format("DESTINATION - {LEFT, RIGHT, UP, DOWN}"))
+        print("{:<80}".format("to shoot - shoot DESTINATION"))
+        print("{:<80}".format("to move - move DESTINATION"))
+        print("{:<80}".format("to end phase - end"))
+
+    def map_list(self, map_list):
+        for board in map_list:
+            print("{:<80}".format(board))

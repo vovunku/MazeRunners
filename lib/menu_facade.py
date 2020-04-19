@@ -1,4 +1,4 @@
-import game_facade
+import lib.game_facade as game_facade
 
 
 class MenuFacade:
@@ -14,6 +14,7 @@ class MenuFacade:
         self.running = True
         while self.running:
             self.deploy.menu()
-            inp = self.receiver.handle_command()
-            if inp in {1, "Play"}:
-
+            inp = self.receiver.handle_string()
+            if inp[0] == "play":
+                game_map = self.map_manager.choose_map()
+                start_info = self.handle_string()

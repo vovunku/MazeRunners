@@ -1,38 +1,45 @@
+import lib.command as command
+
+
 class Cell:
     def __init__(self, items=None, **kwargs):
         if items is None:
-            items = []
-        self.left = kwargs.get("left", None)
-        self.right = kwargs.get("right", None)
-        self.up = kwargs.get("up", None)
-        self.down = kwargs.get("down", None)
-        self._storage = []
+            self.items = []
+        else:
+            self.items = items
+        self.type = "Base"
+        self.left = kwargs.get("LEFT", None)
+        self.right = kwargs.get("RIGHt", None)
+        self.up = kwargs.get("UP", None)
+        self.down = kwargs.get("DOWN", None)
+        self.storage = []
         self.lay = kwargs.get("lay", 0)
         self.x = kwargs.get("x", 0)
         self.y = kwargs.get("y", 0)
+        self.users = set()
 
     def activate(self, user):
         pass
 
     def collect(self):
-        tmp = self._storage
-        self._storage = []
+        tmp = self.storage
+        self.storage = []
         return tmp
 
     def observe(self):
-        return tuple(self._storage)
+        return tuple(self.storage)
 
     def put_in(self, *args):
-        self._storage.extend(args)
+        self.storage.extend(args)
 
-    def move(self, user):
-        ToDo
+    def move(self, move_strategy, player_id):
+        return move_strategy.cell_move(self, player_id)
 
     def set_neighbour(self, **kwargs):
-        self.left = kwargs.get("left", None)
-        self.right = kwargs.get("right", None)
-        self.up = kwargs.get("up", None)
-        self.down = kwargs.get("down", None)
+        self.left = kwargs.get("LEFT", None)
+        self.right = kwargs.get("RIGHT", None)
+        self.up = kwargs.get("UP", None)
+        self.down = kwargs.get("DOWN", None)
 
     def __repr__(self):
         return self.type[:2]
@@ -67,32 +74,28 @@ class Empty(Cell):
 class Stun(Cell):
     def __init__(self, stun_duration, items=None, **kwargs):
         super().__init__(items, **kwargs)
-        if items is None:
-            items = []
         self.stun_duration = stun_duration
         self.type = "Stun"
 
     def activate(self, user):
-        ToDo
+        return command.StunCommand(self)
 
 
 class RubberRoom(Cell):
     def __init__(self, exit_destination, items=None, **kwargs):
         super().__init__(items, **kwargs)
-        if items is None:
-            items = []
         self.exit_destination = exit_destination
         self.type = "RubberRoom"
 
-    def move(self, user):
-        ToDo
+    def move(self, user_id, move_strategy):
+        if move_strategy.type == self.exit_destination:
+            return command.MoveCommand(move_strategy)
+        return command.FalseMoveCommand(move_strategy)
 
 
 class Teleport(Cell):
     def __init__(self, shift_destination, items=None, **kwargs):
         super().__init__(items, **kwargs)
-        if items is None:
-            items = []
         self.shift_destination = shift_destination
         self.type = "Teleport"
 
@@ -105,28 +108,26 @@ class Teleport(Cell):
         self.shift_destination = shift_destination
 
     def activate(self, user):
-        ToDo
+        return (self.shift_destination.activate()).insert(0, command.TeleportCommand(self))
 
 
 class Armory(Cell):
     def __init__(self, ammunition=3, items=None, **kwargs):
         super().__init__(items, **kwargs)
-        if items is None:
-            items = []
         self.type = "Armory"
         self.ammunition = ammunition
 
     def activate(self, user):
-        ToDo
+        return [command.ArmoryCommand(self.ammunition)]
 
 
 class Exit(Cell):
     def __init__(self, exit_destination, items=None, **kwargs):
         super().__init__(items, **kwargs)
-        if items is None:
-            items = []
         self.exit_destination = exit_destination
         self.type = "Exit"
 
-    def move(self, user):
-        ToDo
+    def move(self, user_id, move_strategy):
+        if move_strategy.type == self.exit_destination:
+            return command.ExitCommand(cell)
+        return super().move()

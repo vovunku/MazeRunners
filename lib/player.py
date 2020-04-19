@@ -1,14 +1,17 @@
+import queue
+
+
 class Player:
     """Simplest player"""
 
     def __int__(self, lay, x, y, player_id, global_statements):
-        self.type = "Abstract"
+        self.type = "Base"
         self.backpack = {"Ammo": 0}
         self.statement = {"Stun": 0}
         self.coords = {"Lay": lay, "X": x, "Y": y}
         self.id = player_id
         self.command_log = []
-        self.global_statements = global_statements
+        self.command_queue = queue.Queue()
 
     def check_backpack(self):
         return self.backpack
@@ -22,15 +25,14 @@ class Player:
     def receive_ammo(self, ammunition):
         self.backpack["Ammo"] = max(self.backpack["Ammo"], ammunition)
 
-    def get_command(self, command):
-        command.execute(self)
+    def handle_command(self, command):
         self.command_log.append(command)
+        self.command_queue.put(command)
 
     def set_coords(self, lay, x, y):
         self.coords["Lay"] = lay
         self.coords["X"] = x
         self.coords["Y"] = y
 
-    def achieve_exit(self):
-        self.global_statements["Winner"] = self.id
-        self.global_statements["Running"] = False
+    def get_coords(self):
+        return self.coords
