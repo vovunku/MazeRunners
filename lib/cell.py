@@ -16,10 +16,10 @@ class Cell:
         self.lay = kwargs.get("lay", 0)
         self.x = kwargs.get("x", 0)
         self.y = kwargs.get("y", 0)
-        self.users = set()
+        self.players = set()
 
-    def activate(self, user):
-        pass
+    def activate(self):
+        return []
 
     def collect(self):
         tmp = self.storage
@@ -77,8 +77,8 @@ class Stun(Cell):
         self.stun_duration = stun_duration
         self.type = "Stun"
 
-    def activate(self, user):
-        return command.StunCommand(self)
+    def activate(self):
+        return [command.StunCommand(self)]
 
 
 class RubberRoom(Cell):
@@ -87,7 +87,7 @@ class RubberRoom(Cell):
         self.exit_destination = exit_destination
         self.type = "RubberRoom"
 
-    def move(self, user_id, move_strategy):
+    def move(self, player_id, move_strategy):
         if move_strategy.type == self.exit_destination:
             return command.MoveCommand(move_strategy)
         return command.FalseMoveCommand(move_strategy)
@@ -107,7 +107,7 @@ class Teleport(Cell):
     def set_shift_destination(self, shift_destination):
         self.shift_destination = shift_destination
 
-    def activate(self, user):
+    def activate(self):
         return (self.shift_destination.activate()).insert(0, command.TeleportCommand(self))
 
 
@@ -117,8 +117,8 @@ class Armory(Cell):
         self.type = "Armory"
         self.ammunition = ammunition
 
-    def activate(self, user):
-        return [command.ArmoryCommand(self.ammunition)]
+    def activate(self):
+        return [command.ArmoryCommand(self)]
 
 
 class Exit(Cell):
@@ -127,7 +127,7 @@ class Exit(Cell):
         self.exit_destination = exit_destination
         self.type = "Exit"
 
-    def move(self, user_id, move_strategy):
+    def move(self, player_id, move_strategy):
         if move_strategy.type == self.exit_destination:
-            return command.ExitCommand(cell)
+            return command.ExitCommand(self)
         return super().move()

@@ -14,7 +14,7 @@ class GameVisitor:
     def visit_stun_c(self, command):
         self.display.message(
             "{0} player has been stunned for {1} turns"
-            .format(self.player.id, command.cell.duration))
+            .format(self.player.id, command.cell.stun_duration))
         #  не очень хорошо так далеко залезать, мб лучше передавать в команду только необходимую инфу
         #  кажись закон деметры нарушается, но пока так
         command.execute(self.player)
@@ -42,19 +42,19 @@ class GameVisitor:
     def visit_move_c(self, command):
         self.display.message(
             "{0} player successfully moved {1}"
-            .format(self.player.id, command.move_strategy.type.lowercase()))
+            .format(self.player.id, command.move_strategy.type.lower()))
         command.execute(self.player)
 
     def visit_false_move_c(self, command):
         self.display.message(
             "{0} player successfully moved {1}"
-            .format(self.player.id, command.move_strategy.type.lowercase()))
+            .format(self.player.id, command.move_strategy.type.lower()))
         command.excute()
 
     def visit_wall_stop_c(self, command):
         self.display.message(
             "{0} player didn't move {1} because of wall"
-            .format(self.player, command.move_strategy.type.lowercase()))
+            .format(self.player, command.move_strategy.type.lower()))
         command.execute(self.player)
 
     def visit_i_move_c(self, command):
@@ -70,3 +70,15 @@ class GameVisitor:
     def visit_i_end_turn_c(self, command):
         self.turn_running = False
         command.execute(self.board, self.player.id)
+
+    def visit_respawn_c(self, command):
+        self.display.message("{0} player has been respawned".format(self.player.id))
+        command.execute(self.board, self.player.id)
+
+    def visit_death_c(self, command):
+        self.display.message("{0} player has been died".format(self.player.id))
+        command.execute(self.player)
+
+    def visit_bad_action_c(self, command):
+        self.display.message("{0} player: bad action; type - {1}".format(self.player.id, command.type))
+        command.execute()

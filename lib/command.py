@@ -23,7 +23,7 @@ class StunCommand(CellCommand):
         visitor.visit_stun_c(self)
 
     def execute(self, player):
-        player.stun(self.cell.duration)
+        player.stun(self.cell.stun_duration)
 
 
 class ArmoryCommand(CellCommand):
@@ -58,7 +58,7 @@ class ExitCommand(CellCommand):
 
 
 class MoveCommand(CellCommand):
-    """Command for standart move"""
+    """Command for standard move"""
 
     def __init__(self, cell, move_strategy):
         super().__init__(cell)
@@ -99,6 +99,7 @@ class WallStopCommand(CellCommand):
     def execute(self, player):
         pass
 
+
 class DeathCommand(CellCommand):
     """Command for player got killed"""
 
@@ -107,6 +108,8 @@ class DeathCommand(CellCommand):
 
     def execute(self, player):
         player.respawn()
+
+
 # ======================================================================================================================
 
 
@@ -172,6 +175,8 @@ class RespawnCommand(BoardCommand):
 
     def execute(self, board, player_id):
         board.respawn(player_id)
+
+
 # ======================================================================================================================
 
 
@@ -185,7 +190,7 @@ class EmptyCommand(ABC):
         pass
 
 
-class BadAction(EmptyCommand):
+class BadActionCommand(EmptyCommand):
 
     def __init__(self, type):
         self.type = type

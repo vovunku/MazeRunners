@@ -20,7 +20,7 @@ class MapEditor:
                 ans_map.append(line.strip())
         return ans_map
 
-    def add_map(self, filename):
+    def read_map(self, filename):
         raw_map = self.read_map_file(filename)
         maps_count = int(raw_map[0])
         types_gen = self.get_types(raw_map)
@@ -58,15 +58,6 @@ class MapEditor:
 
             file_it += 2 * rows - 1
 
-        exit_cell = None
-        for lay in game_map:
-            for row in lay:
-                for unit in row:
-                    if unit.type == "Exit":
-                        exit_cell = unit
-        if exit_cell is None:
-            raise ImportError("No Exit")
-
         for shift in shift_for_teleports:
             (game_map[shift[0][0]]
             [shift[0][1]]
@@ -74,7 +65,6 @@ class MapEditor:
                                                  [shift[1][1]]
                                                  [shift[1][2]])
 
-        print(self.bfs_check_map(exit_cell, game_map))
         return game_map
 
     def create_cell(self, cell_type, *args):  # [0] - type specific; ?[1] - items
@@ -158,8 +148,26 @@ class MapEditor:
                         return problematic_cell
         return None
 
-    def choose_map(self):
-        self.display.map_list(self.map_manager.get_map_list)
-        inp = self.receiver.handle_string()
-        map_number = int(inp[0])
+    def check_map(self, filemane):
+        game_map = self.read_map(filemane)
 
+        exit_cell = None
+        for lay in game_map:
+            for row in lay:
+                for unit in row:
+                    if unit.type == "Exit":
+                        exit_cell = unit
+        if exit_cell is None:
+            raise ImportError("No Exit")
+
+        return self.bfs_check_map(exit_cell, game_map)
+
+    def choose_map(self):
+        map_list = self.map_manager.get_map_list()
+        self.display.map_list(map_list)
+        inp = self.receiver.handle_string()
+        map_id = int(inp[0]) - 1
+        return self.read_map(self.map_manager.get_map(map_id))
+
+    def add_map(self, map_path):
+        self.map_manager.add_map_file(map_path)

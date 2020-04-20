@@ -27,7 +27,9 @@ class ConsoleMapManager(MapManager):
         self.map_list = []
         with os.scandir(self.lib_path) as maps:
             for game_map in maps:
-                self.map_list.append(game_map)
+                abs_path = game_map.path
+                related_path = abs_path[len(self.lib_path):]
+                self.map_list.append(related_path)
 
     def get_map_list(self):
         return self.map_list

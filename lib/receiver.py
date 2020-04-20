@@ -7,22 +7,18 @@ import lib.command as command
 class Receiver(ABC):
     """Receiver interface"""
 
-    def __int__(self):
+    def __init__(self):
         self.type = "Abstract"
 
     @abstractmethod
     def handle_string(self):
         pass
 
-    @abstractmethod
-    def read_map_file(self, filename):
-        pass
-
 
 class SimpleConsoleReceiver(Receiver):
     """Console receiver with only text input (no keys supported)"""
 
-    def __int__(self):
+    def __init__(self):
         self.type = "Console"
 
     def handle_string(self):
@@ -31,13 +27,13 @@ class SimpleConsoleReceiver(Receiver):
 
     def create_strategy(self, key):
         if key == "LEFT":
-            return strategy.ActLeft
+            return strategy.ActLeft()
         elif key == "RIGHT":
-            return strategy.ActRight
+            return strategy.ActRight()
         elif key == "UP":
-            return strategy.ActUp
+            return strategy.ActUp()
         elif key == "DOWN":
-            return strategy.ActDown
+            return strategy.ActDown()
 
     def handle_game_command(self):
         inp = self.handle_string()
