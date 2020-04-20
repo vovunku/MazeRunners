@@ -7,6 +7,8 @@ class Board:
     def __init__(self, game_map, player_dict):
         self.game_map = game_map
         self.player_dict = player_dict
+        for player_id in player_dict:
+            self.respawn(player_id)
 
     def move(self, player_id, move_strategy):
         player = self.player_dict[player_id]
@@ -42,4 +44,4 @@ class Board:
     def respawn(self, player_id):
         player = self.player_dict[player_id]
         lay, x, y = player.get_coords()
-        self.game_map[lay][x][y].players.insert(player_id)
+        self.game_map[lay][x][y].players.add(player_id)

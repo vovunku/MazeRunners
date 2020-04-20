@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from shutil import copyfile
+from shutil import copy
 import os
 
 
@@ -38,4 +38,4 @@ class ConsoleMapManager(MapManager):
         return self.lib_path + self.map_list[map_id]
 
     def add_map_file(self, filename):
-        copyfile(filename, self.lib_path)
+        copy(filename, self.lib_path)

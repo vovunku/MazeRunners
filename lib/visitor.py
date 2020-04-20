@@ -27,8 +27,8 @@ class GameVisitor:
 
     def visit_teleport_c(self, command):
         self.display.message(
-            "{0} player has been teleported"
-            .format(self.player.id))
+            "{0} player has been teleported to {1} cell"
+            .format(self.player.id, command.cell.shift_destination.type))
         command.execute(self.player)
 
     def visit_exit_c(self, command):
@@ -78,7 +78,7 @@ class GameVisitor:
         command.execute(self.board, self.player.id)
 
     def visit_death_c(self, command):
-        self.display.message("{0} player has been died".format(self.player.id))
+        self.display.message("{0} player has died".format(self.player.id))
         command.execute(self.player)
 
     def visit_bad_action_move_c(self, command):

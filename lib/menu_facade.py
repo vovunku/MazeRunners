@@ -37,8 +37,9 @@ class MenuFacade:
                 map_path = self.receiver.handle_string()[0]
                 result = self.map_editor.check_map(map_path)
                 if result:
-                    self.display("Map is incorrect - problem cell = {0}".format(result))
+                    self.display.message("Map is incorrect - problem cell = {0}".format(result))
                     continue
+                self.display.message("Map is correct! Adding it")
                 self.map_editor.add_map(map_path)
             elif inp[0] == "End":
                 self.display("See you later!")

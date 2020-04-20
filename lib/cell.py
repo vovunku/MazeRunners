@@ -92,6 +92,17 @@ class RubberRoom(Cell):
             return move_strategy.cell_move(self, player_id)
         return [command.FalseMoveCommand(self, move_strategy)]
 
+    def show_accessible(self):
+        if self.left is not None and self.type == "LEFT":
+            return [self.left]
+        if self.right is not None and self.type == "RIGHT":
+            return [self.right]
+        if self.up is not None and self.type == "UP":
+            return [self.right]
+        if self.down is not None and self.type == "DOWN":
+            return [self.down]
+        return []
+
 
 class Teleport(Cell):
     def __init__(self, shift_destination, items=None, **kwargs):
@@ -100,17 +111,14 @@ class Teleport(Cell):
         self.type = "Teleport"
 
     def show_accessible(self):
-        ans = super().show_accessible()
-        ans.append(self.shift_destination)
+        ans = [self.shift_destination]
         return ans
 
     def set_shift_destination(self, shift_destination):
         self.shift_destination = shift_destination
 
     def activate(self):
-        command_list = self.shift_destination.activate()
-        command_list.insert(0, command.TeleportCommand(self))
-        return command_list
+        return [command.TeleportCommand(self)]
 
 
 class Armory(Cell):
@@ -131,5 +139,5 @@ class Exit(Cell):
 
     def move(self, player_id, move_strategy):
         if move_strategy.type == self.exit_destination:
-            return command.ExitCommand(self)
+            return [command.ExitCommand(self)]
         return super().move()
