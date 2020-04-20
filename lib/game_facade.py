@@ -23,9 +23,11 @@ class GameFacade:
                 self.display.message("{0} player turn started".format(player_id))
                 game_visitor.set_player(player)
                 order_queue = player.command_queue
+                game_visitor.turn_running = True
                 while game_visitor.turn_running:
                     while not order_queue.empty():
                         next_command = order_queue.get()
                         next_command.accept(game_visitor)
-                    new_command = self.receiver.handle_game_command()
-                    player.handle_command_list([new_command])
+                    if game_visitor.turn_running and order_queue.empty():
+                        new_command = self.receiver.handle_game_command()
+                        player.handle_command_list([new_command])

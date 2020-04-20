@@ -10,7 +10,7 @@ class Board:
 
     def move(self, player_id, move_strategy):
         player = self.player_dict[player_id]
-        if player.move_count == 0:
+        if player.move_count == 0 or player.statement["Stun"] > 0:
             player.handle_command_list([command.BadActionCommand("move")])
             return None
         lay, x, y = player.get_coords()
@@ -25,7 +25,7 @@ class Board:
     def shoot(self, player_id, shoot_strategy): # заглушка, по хорошему нужен класс с пулей
         player = self.player_dict[player_id]
         if player.backpack["Ammo"] == 0:
-            player.handle_command_list(command.BadActionCommand("shoot"))
+            player.handle_command_list([command.BadActionCommand("shoot")])
             return None
         player.backpack["Ammo"] -= 1
         lay, x, y = player.get_coords()

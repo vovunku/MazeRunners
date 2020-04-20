@@ -43,13 +43,15 @@ class GameVisitor:
         self.display.message(
             "{0} player successfully moved {1}"
             .format(self.player.id, command.move_strategy.type.lower()))
+        if command.cell.type == "RubberRoom":
+            self.display.message("{0} player successfully exited Rubber Room".format(self.player.id))
         command.execute(self.player)
 
     def visit_false_move_c(self, command):
         self.display.message(
             "{0} player successfully moved {1}"
             .format(self.player.id, command.move_strategy.type.lower()))
-        command.excute()
+        command.execute(self.player)
 
     def visit_wall_stop_c(self, command):
         self.display.message(
@@ -79,6 +81,6 @@ class GameVisitor:
         self.display.message("{0} player has been died".format(self.player.id))
         command.execute(self.player)
 
-    def visit_bad_action_c(self, command):
+    def visit_bad_action_move_c(self, command):
         self.display.message("{0} player: bad action; type - {1}".format(self.player.id, command.type))
         command.execute()

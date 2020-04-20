@@ -26,7 +26,7 @@ class Player:
         return self.statement
 
     def stun(self, duration):
-        self.statement[duration] = duration
+        self.statement["Stun"] = duration
 
     def receive_ammo(self, ammunition):
         self.backpack["Ammo"] = max(self.backpack["Ammo"], ammunition)
@@ -45,6 +45,9 @@ class Player:
         return [self.lay, self.x, self.y]
 
     def reset(self):
+        if self.statement["Stun"] > 0:
+            self.statement["Stun"] -= 1
+            return None
         self.move_count = 1
 
     def respawn(self):
@@ -52,3 +55,6 @@ class Player:
         self.y = self.spawn_y
         self.lay = self.spawn_lay
         self.reset()
+
+    def skip_turn(self):
+        self.statement["Stun"] -= 1

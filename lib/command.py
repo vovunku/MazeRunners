@@ -108,8 +108,6 @@ class DeathCommand(CellCommand):
 
     def execute(self, player):
         player.respawn()
-
-
 # ======================================================================================================================
 
 
@@ -180,7 +178,7 @@ class RespawnCommand(BoardCommand):
 # ======================================================================================================================
 
 
-class EmptyCommand(ABC):
+class EventCommand(ABC):
 
     @abstractmethod
     def accept(self, visitor):
@@ -190,10 +188,11 @@ class EmptyCommand(ABC):
         pass
 
 
-class BadActionCommand(EmptyCommand):
+class BadActionCommand(EventCommand):
+    """Command for undone action"""
 
     def __init__(self, type):
         self.type = type
 
     def accept(self, visitor):
-        visitor.visit_bad_action_move(self)
+        visitor.visit_bad_action_move_c(self)

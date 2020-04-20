@@ -89,8 +89,8 @@ class RubberRoom(Cell):
 
     def move(self, player_id, move_strategy):
         if move_strategy.type == self.exit_destination:
-            return command.MoveCommand(move_strategy)
-        return command.FalseMoveCommand(move_strategy)
+            return move_strategy.cell_move(self, player_id)
+        return [command.FalseMoveCommand(self, move_strategy)]
 
 
 class Teleport(Cell):
@@ -108,7 +108,9 @@ class Teleport(Cell):
         self.shift_destination = shift_destination
 
     def activate(self):
-        return (self.shift_destination.activate()).insert(0, command.TeleportCommand(self))
+        command_list = self.shift_destination.activate()
+        command_list.insert(0, command.TeleportCommand(self))
+        return command_list
 
 
 class Armory(Cell):

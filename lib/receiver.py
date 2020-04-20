@@ -20,6 +20,7 @@ class SimpleConsoleReceiver(Receiver):
 
     def __init__(self):
         self.type = "Console"
+        self.destinations = {"LEFT", "RIGHT", "UP", "DOWN"}
 
     def handle_string(self):
         inp = sys.stdin.readline().strip()
@@ -36,14 +37,18 @@ class SimpleConsoleReceiver(Receiver):
             return strategy.ActDown()
 
     def handle_game_command(self):
-        inp = self.handle_string()
-        if inp[0] == "move":
-            strat = self.create_strategy(inp[1])
-            return command.InputMoveCommand(strat)
-        elif inp[0] == "shoot":
-            strat = self.create_strategy(inp[1])
-            return command.InputMoveCommand(strat)
-        elif inp[0] == "end":
-            return command.InputEndTurnCommand()
-        elif inp[0] == "help":
-            return command.InputHelpCommand()
+        incorrect = True
+        while incorrect:
+            inp = self.handle_string()
+            if inp[0] == "move":
+                if inp[1] in self.destinations:
+                    strat = self.create_strategy(inp[1])
+                    return command.InputMoveCommand(strat)
+            elif inp[0] == "shoot":
+                if inp[1] in self.destinations:
+                    strat = self.create_strategy(inp[1])
+                    return command.InputShootCommand(strat)
+            elif inp[0] == "end":
+                return command.InputEndTurnCommand()
+            elif inp[0] == "help":
+                return command.InputHelpCommand()
