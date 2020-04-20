@@ -17,6 +17,7 @@ class DestinationStrategy:
     def next_cell(self, cell):
         pass
 
+
 class ActLeft(DestinationStrategy):
     def __init__(self):
         self.type = "LEFT"
@@ -27,8 +28,8 @@ class ActLeft(DestinationStrategy):
         return (cell.left.activate()).insert(0, command.MoveCommand(cell, self))
 
     def player_move(self, player):
-        crd = player.get_coords()
-        player.set_coords(crd["Lay"], crd["X"], crd["Y"] - 1)
+        lay, x, y = player.get_coords()
+        player.set_coords(lay, x, y - 1)
 
     def next_cell(self, cell):
         return cell.left
@@ -44,8 +45,8 @@ class ActRight(DestinationStrategy):
         return (cell.right.activate()).insert(0, command.MoveCommand(cell, self))
 
     def player_move(self, player):
-        crd = player.get_coords()
-        player.set_coords(crd["Lay"], crd["X"], crd["Y"] + 1)
+        lay, x, y = player.get_coords()
+        player.set_coords(lay, x, y + 1)
 
     def next_cell(self, cell):
         return cell.right
@@ -61,8 +62,8 @@ class ActUp(DestinationStrategy):
         return (cell.up.activate()).insert(0, command.MoveCommand(cell, self))
 
     def player_move(self, player):
-        crd = player.get_coords()
-        player.set_coords(crd["Lay"], crd["X"] - 1, crd["Y"])
+        lay, x, y = player.get_coords()
+        player.set_coords(lay, x - 1, y)
 
     def next_cell(self, cell):
         return cell.up
@@ -78,8 +79,8 @@ class ActDown(DestinationStrategy):
         return (cell.down.activate()).insert(0, command.MoveCommand(cell, self))
 
     def player_move(self, player):
-        crd = player.get_coords()
-        player.set_coords(crd["Lay"], crd["X"] + 1, crd["Y"])
+        lay, x, y = player.get_coords()
+        player.set_coords(lay, x + 1, y)
 
     def next_cell(self, cell):
         return cell.down

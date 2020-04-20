@@ -1,6 +1,9 @@
 import lib.cell as cell
+import lib.board as board
 from queue import Queue
 
+
+# это ужас, подскажите, пожалуйста, как это чудо переделать
 
 class MapEditor:
     """Module between map manager and other modules"""
@@ -23,18 +26,18 @@ class MapEditor:
         types_gen = self.get_types(raw_map)
         file_it = 1
         shift_for_teleports = []
-        board = []
+        game_map = []
         for t in range(maps_count):
-            board.append([])
+            game_map.append([])
 
-            # set board with cells
+            # set game_map with cells
             rows, cols = map(int, raw_map[file_it].split(' '))
             for i in range(rows):
-                board[t].append([])
+                game_map[t].append([])
                 for j in range(cols):
                     cell_id = raw_map[file_it + 1 + 2 * i][2 * j]
                     new_cell = self.create_cell(types_gen[cell_id][0], types_gen[cell_id][1])
-                    board[t][i].append(new_cell)
+                    game_map[t][i].append(new_cell)
                     new_cell.set_coords(t, i, j)
                     if types_gen[cell_id][0] == "Teleport":
                         shift_for_teleports.append([[t, i, j], types_gen[cell_id][2]])  # [from, to]
@@ -42,21 +45,21 @@ class MapEditor:
             # set row siblings
             for i in range(rows):
                 for j in range(cols - 1):
-                    self.set_row_siblings(board[t][i][j],
-                                          board[t][i][j + 1],
+                    self.set_row_siblings(game_map[t][i][j],
+                                          game_map[t][i][j + 1],
                                           raw_map[file_it + 1 + 2 * i][2 * j + 1])
 
             # set col siblings
             for i in range(rows - 1):
                 for j in range(cols):
-                    self.set_col_siblings(board[t][i][j],
-                                          board[t][i + 1][j],
+                    self.set_col_siblings(game_map[t][i][j],
+                                          game_map[t][i + 1][j],
                                           raw_map[file_it + 1 + 2 * i + 1][2 * j])
 
             file_it += 2 * rows - 1
 
         exit_cell = None
-        for lay in board:
+        for lay in game_map:
             for row in lay:
                 for unit in row:
                     if unit.type == "Exit":
@@ -65,14 +68,14 @@ class MapEditor:
             raise ImportError("No Exit")
 
         for shift in shift_for_teleports:
-            (board[shift[0][0]]
+            (game_map[shift[0][0]]
             [shift[0][1]]
-            [shift[0][2]]).set_shift_destination(board[shift[1][0]]
+            [shift[0][2]]).set_shift_destination(game_map[shift[1][0]]
                                                  [shift[1][1]]
                                                  [shift[1][2]])
 
-        print(self.bfs_check_map(exit_cell, board))
-        return board
+        print(self.bfs_check_map(exit_cell, game_map))
+        return game_map
 
     def create_cell(self, cell_type, *args):  # [0] - type specific; ?[1] - items
         if cell_type == "Empty":
@@ -125,14 +128,14 @@ class MapEditor:
             up.down = down
             down.up = up
 
-    def bfs_check_cell(self, lay, x, y, dest_lay, dest_x, dest_y, board):
+    def bfs_check_cell(self, lay, x, y, dest_lay, dest_x, dest_y, game_map):
         visited = []
-        for l, layer in enumerate(board):
+        for l, layer in enumerate(game_map):
             visited.append([])
             for row in layer:
                 visited[l].append([False for _ in range(len(row))])
         pool = Queue()
-        pool.put(board[lay][x][y])
+        pool.put(game_map[lay][x][y])
         while not pool.empty():
             cur_cell = pool.get()
             visited[cur_cell.lay][cur_cell.x][cur_cell.y] = True
@@ -145,12 +148,12 @@ class MapEditor:
             return [lay, x, y]
         return None
 
-    def bfs_check_map(self, exit_cell, board):
+    def bfs_check_map(self, exit_cell, game_map):
         ans = []
-        for l, layer in enumerate(board):
+        for l, layer in enumerate(game_map):
             for x, row in enumerate(layer):
                 for y, checked in enumerate(row):
-                    problematic_cell = self.bfs_check_cell(l, x, y, exit_cell.lay, exit_cell.x, exit_cell.y, board)
+                    problematic_cell = self.bfs_check_cell(l, x, y, exit_cell.lay, exit_cell.x, exit_cell.y, game_map)
                     if problematic_cell is not None:
                         return problematic_cell
         return None
@@ -158,4 +161,5 @@ class MapEditor:
     def choose_map(self):
         self.display.map_list(self.map_manager.get_map_list)
         inp = self.receiver.handle_string()
-        
+        map_number = int(inp[0])
+

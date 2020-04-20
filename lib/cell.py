@@ -32,7 +32,7 @@ class Cell:
     def put_in(self, *args):
         self.storage.extend(args)
 
-    def move(self, move_strategy, player_id):
+    def move(self, player_id, move_strategy):
         return move_strategy.cell_move(self, player_id)
 
     def set_neighbour(self, **kwargs):

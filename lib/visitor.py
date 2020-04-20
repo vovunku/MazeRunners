@@ -58,7 +58,6 @@ class GameVisitor:
         command.execute(self.player)
 
     def visit_i_move_c(self, command):
-        if self.player.
         command.execute(self.board, self.player.id)
 
     def visit_i_shoot_c(self, command):

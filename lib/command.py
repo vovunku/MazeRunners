@@ -69,6 +69,7 @@ class MoveCommand(CellCommand):
 
     def execute(self, player):
         self.move_strategy.player_move(player)
+        player.move_count -= 1
 
 
 class FalseMoveCommand(CellCommand):
@@ -82,7 +83,7 @@ class FalseMoveCommand(CellCommand):
         visitor.visit_false_move_c(self)
 
     def execute(self, player):
-        pass
+        player.move_count -= 1
 
 
 class WallStopCommand(CellCommand):
@@ -97,10 +98,19 @@ class WallStopCommand(CellCommand):
 
     def execute(self, player):
         pass
+
+class DeathCommand(CellCommand):
+    """Command for player got killed"""
+
+    def accept(self, visitor):
+        visitor.visit_death_c(self)
+
+    def execute(self, player):
+        player.respawn()
 # ======================================================================================================================
 
 
-class UserCommand(ABC):
+class BoardCommand(ABC):
     """Interface for commands from user to player"""
 
     @abstractmethod
@@ -112,7 +122,7 @@ class UserCommand(ABC):
         pass
 
 
-class InputMoveCommand(UserCommand):
+class InputMoveCommand(BoardCommand):
     """Command from user to move"""
 
     def __init__(self, move_strategy):
@@ -125,7 +135,7 @@ class InputMoveCommand(UserCommand):
         board.move(player_id, self.move_strategy)
 
 
-class InputShootCommand(UserCommand):
+class InputShootCommand(BoardCommand):
     """Command for player shooting"""
 
     def __init__(self, move_strategy):
@@ -138,7 +148,9 @@ class InputShootCommand(UserCommand):
         board.shoot(player_id, self.move_strategy)
 
 
-class InputHelpCommand(UserCommand):
+class InputHelpCommand(BoardCommand):  # вероятно нужно перенести куда-то еще, тк не вписывается в общую логику
+    """Command from user for help display"""
+
     def accept(self, visitor):
         visitor.visit_i_help_c(self)
 
@@ -146,9 +158,37 @@ class InputHelpCommand(UserCommand):
         pass
 
 
-class InputEndTurnCommand(UserCommand):
+class InputEndTurnCommand(BoardCommand):
     def accept(self, visitor):
         visitor.visit_i_end_turn_c(self)
 
     def execute(self, board, player_id):
         board.reset(player_id)
+
+
+class RespawnCommand(BoardCommand):
+    def accept(self, visitor):
+        visitor.visit_respawn_c(self)
+
+    def execute(self, board, player_id):
+        board.respawn(player_id)
+# ======================================================================================================================
+
+
+class EmptyCommand(ABC):
+
+    @abstractmethod
+    def accept(self, visitor):
+        pass
+
+    def execute(self):
+        pass
+
+
+class BadAction(EmptyCommand):
+
+    def __init__(self, type):
+        self.type = type
+
+    def accept(self, visitor):
+        visitor.visit_bad_action_move(self)
