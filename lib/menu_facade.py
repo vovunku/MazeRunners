@@ -18,11 +18,14 @@ class MenuFacade:
             self.display.menu()
             inp = self.receiver.handle_string()
             if inp[0] == "Play":
+                self.display.message("Choose map")
                 game_map = self.map_editor.choose_map()
                 self.display.message("Insert players information")
+                self.display.message("Insert players quantity")
                 start_info = self.receiver.handle_string()
                 n = int(start_info[0])
                 players = dict()
+                self.display.message("Insert spawn positions")
                 for p_id in range(n):
                     spawn_lay, spawn_x, spawn_y = map(int, self.receiver.handle_string())
                     spawn_lay -= 1
@@ -41,6 +44,6 @@ class MenuFacade:
                     continue
                 self.display.message("Map is correct! Adding it")
                 self.map_editor.add_map(map_path)
-            elif inp[0] == "End":
-                self.display("See you later!")
+            elif inp[0] == "Exit":
+                self.display.message("See you later!")
                 running = False

@@ -55,6 +55,7 @@ class Player:
         self.y = self.spawn_y
         self.lay = self.spawn_lay
         self.backpack["Ammo"] = 0
+        self.statement["Stun"] = 0
         self.reset()
 
     def skip_turn(self):
