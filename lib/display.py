@@ -24,12 +24,6 @@ class ConsoleDisplay(Display):
         super().__init__()
         self.type = "Console"
 
-    def clear_row(self):
-        if 'posix' in os.name:  # Clear the Linux terminal.
-            os.system('clear')
-        elif os.name in ('ce', 'nt', 'dos'):  # Clear Windows command prompt.
-            os.system('cls')
-
     def menu(self):
         print("{:=^80}".format("Welcome to MazeRunners!"))
         print("{:<80}".format("1 Play"))
@@ -37,14 +31,15 @@ class ConsoleDisplay(Display):
         print("{:<80}".format("3 Exit"))
 
     def message(self, message: str):
-        print("{0:^80}".format(message))
+        print("{0:<80}".format(message))
 
     def help(self):
         print("{:<80}".format("DESTINATION - {LEFT, RIGHT, UP, DOWN}"))
-        print("{:<80}".format("to shoot - shoot DESTINATION"))
-        print("{:<80}".format("to move - move DESTINATION"))
-        print("{:<80}".format("to end phase - end"))
+        print("{:<80}".format("to shoot type - \"shoot\" <DESTINATION>"))
+        print("{:<80}".format("to move - \"move\" <DESTINATION>"))
+        print("{:<80}".format("to end phase - \"end\""))
+        print("{:<80}".format("to see help - \"help\""))
 
     def map_list(self, map_list):
-        for board in map_list:
-            print("{:<80}".format(board))
+        for id, board in enumerate(map_list):
+            print("{0} {1:<80}".format(id + 1, board))

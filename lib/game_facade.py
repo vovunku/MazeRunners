@@ -1,23 +1,24 @@
-import lib.receiver as receiver
-import lib.display as display
-import lib.map_editor as map_editor
+import lib.player as player
 import lib.visitor as visitor
+import lib.board as board
 
 
 class GameFacade:
     """Accelerate game modules and allow interaction"""
 
-    def __init__(self, receiver, display, board, players_dict):
+    def __init__(self, receiver, display):
         self.receiver = receiver
         self.display = display
-        self.board = board
-        self.players = players_dict
+        self.board = None
+        self.players = None
+        self.game_map = None
 
     def game_loop(self):
+        self.initialize()
         game_visitor = visitor.GameVisitor(self.display, self.board)
+        self.display.help()
         while game_visitor.game_running:
             for player_id, player in self.players.items():
-                self.display.help()
                 if not game_visitor.game_running:
                     break
                 self.display.message("{0} player turn started".format(player_id))
@@ -29,5 +30,33 @@ class GameFacade:
                         next_command = order_queue.get()
                         next_command.accept(game_visitor)
                     if game_visitor.turn_running and order_queue.empty():
-                        new_command = self.receiver.handle_game_command()
-                        player.handle_command_list([new_command])
+                        incorrect = True
+                        while incorrect:
+                            try:
+                                new_command = self.receiver.handle_game_command()
+                                player.handle_command_list([new_command])
+                                incorrect = False
+                            except Exception as err:
+                                self.display.message("Error: {0}".format(str(err)))
+
+    def initialize(self):
+        if self.game_map is None:
+            raise ValueError("No map provided")
+        self.display.message("Insert players information")
+        self.display.message("Insert players quantity")
+        start_info = self.receiver.handle_string()
+        n = int(start_info[0])
+        players = dict()
+        for p_id in range(n):
+            self.display.message("Insert spawn position of player {0}".format(p_id))
+            self.display.message("input format: <lay> <x> <y>")
+            spawn_lay, spawn_x, spawn_y = map(int, self.receiver.handle_string())
+            spawn_lay -= 1
+            spawn_x -= 1
+            spawn_y -= 1
+            players[p_id] = player.Player(spawn_lay, spawn_x, spawn_y, spawn_lay, spawn_x, spawn_y, p_id)
+        self.players = players
+        self.board = board.Board(self.game_map, players)
+
+    def set_map(self, game_map):
+        self.game_map = game_map

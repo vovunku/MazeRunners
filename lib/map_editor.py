@@ -8,20 +8,7 @@ from queue import Queue
 class MapEditor:
     """Module between map manager and other modules"""
 
-    def __init__(self, receiver, display, map_manager):
-        self.receiver = receiver
-        self.display = display
-        self.map_manager = map_manager
-
-    def read_map_file(self, filename):
-        ans_map = []
-        with open(filename, 'r') as file:
-            for line in file:
-                ans_map.append(line.strip())
-        return ans_map
-
-    def read_map(self, filename):
-        raw_map = self.read_map_file(filename)
+    def read_map(self, raw_map):
         maps_count = int(raw_map[0])
         types_gen = self.get_types(raw_map)
         file_it = 1
@@ -148,9 +135,7 @@ class MapEditor:
                         return problematic_cell
         return None
 
-    def check_map(self, filemane):
-        game_map = self.read_map(filemane)
-
+    def check_map(self, game_map):
         exit_cell = None
         for lay in game_map:
             for row in lay:
@@ -161,13 +146,3 @@ class MapEditor:
             raise ImportError("No Exit")
 
         return self.bfs_check_map(exit_cell, game_map)
-
-    def choose_map(self):
-        map_list = self.map_manager.get_map_list()
-        self.display.map_list(map_list)
-        inp = self.receiver.handle_string()
-        map_id = int(inp[0]) - 1
-        return self.read_map(self.map_manager.get_map(map_id))
-
-    def add_map(self, map_path):
-        self.map_manager.add_map_file(map_path)
