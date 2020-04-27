@@ -26,6 +26,28 @@ end
 1 /home/vovun/PycharmProjects/MazeRunners/maps/2.txt
 2 /home/vovun/PycharmProjects/MazeRunners/maps/2.txt
 
+### Описание карт
+Пример:
+1
+3 3
+.|S E
+. . _
+S T L
+. . .
+A R .
+E Exit(UP)
+S Stun(2)
+A Armory()
+R RubberRoom(RIGHT)
+L RubberRoom(LEFT)
+T Teleport(1 1 3)
+
+описание почти как в задании. Разница в том, что мы сразу пишем количество карт - n. А далее в n строках описываем карты по отдельности. В описание клетки передаем необходимые параметры:
+Exit(<DESTINATION>)
+RubberRoom(<DESTINATION>)
+Teleport(<lay> <x> <y>)
+Stun(<num>)
+
 #### (ToDo) Глобальные проблемы. 
 ##### 1) Очень многие модули хотят уметь что-то вводить и выводить, поэтому приходится всем им передавать receiver и display. Это плохо, нет стройности. 
 ##### 2) Модуль работы с картами ущербен. Тут хотелось бы подсказки, как его структурировать
