@@ -25,7 +25,6 @@ class EditorFacade:
                 else:
                     self.display.message("Map wasn\'t added")
 
-
     def choose_map(self):
         self.display.message("Please choose map from list. To choose - type the number of map in the list")
         map_list = self.map_manager.get_map_list()
@@ -57,8 +56,8 @@ class EditorFacade:
                 return True
             else:
                 self.display.message("Can't reach exit from this cell: {0}, {1}, {2}".format(result[0] + 1,
-                                                                                     result[1] + 1,
-                                                                                     result[2] + 1))
+                                                                                             result[1] + 1,
+                                                                                             result[2] + 1))
                 return False
         except Exception as err:
             self.display.message("Error: {0}".format(str(err)))

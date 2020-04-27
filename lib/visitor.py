@@ -14,7 +14,7 @@ class GameVisitor:
     def visit_stun_c(self, command):
         self.display.message(
             "{0} player has been stunned for {1} turns"
-            .format(self.player.id, command.cell.stun_duration))
+                .format(self.player.id, command.cell.stun_duration))
         #  не очень хорошо так далеко залезать, мб лучше передавать в команду только необходимую инфу
         #  кажись закон деметры нарушается, но пока так
         command.execute(self.player)
@@ -22,19 +22,19 @@ class GameVisitor:
     def visit_armory_c(self, command):
         self.display.message(
             "{0} player bullets has been restored({1})"
-            .format(self.player.id, command.cell.ammunition))
+                .format(self.player.id, command.cell.ammunition))
         command.execute(self.player)
 
     def visit_teleport_c(self, command):
         self.display.message(
             "{0} player has been teleported to {1} cell"
-            .format(self.player.id, command.cell.shift_destination.type))
+                .format(self.player.id, command.cell.shift_destination.type))
         command.execute(self.player)
 
     def visit_exit_c(self, command):
         self.display.message(
             "{0} player succeeded! End of game!"
-            .format(self.player.id))
+                .format(self.player.id))
         command.execute(self.player)
         self.turn_running = False
         self.game_running = False
@@ -42,7 +42,7 @@ class GameVisitor:
     def visit_move_c(self, command):
         self.display.message(
             "{0} player successfully moved {1}"
-            .format(self.player.id, command.move_strategy.type.lower()))
+                .format(self.player.id, command.move_strategy.type.lower()))
         if command.cell.type == "RubberRoom":
             self.display.message("{0} player successfully exited Rubber Room".format(self.player.id))
         command.execute(self.player)
@@ -50,13 +50,13 @@ class GameVisitor:
     def visit_false_move_c(self, command):
         self.display.message(
             "{0} player successfully moved {1}"
-            .format(self.player.id, command.move_strategy.type.lower()))
+                .format(self.player.id, command.move_strategy.type.lower()))
         command.execute(self.player)
 
     def visit_wall_stop_c(self, command):
         self.display.message(
             "{0} player didn't move {1} because of wall"
-            .format(self.player, command.move_strategy.type.lower()))
+                .format(self.player, command.move_strategy.type.lower()))
         command.execute(self.player)
 
     def visit_i_move_c(self, command):

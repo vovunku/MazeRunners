@@ -1,4 +1,4 @@
-import lib. command as command
+import lib.command as command
 
 
 class Board:
@@ -24,7 +24,7 @@ class Board:
         player = self.player_dict[player_id]
         player.reset()
 
-    def shoot(self, player_id, shoot_strategy): # заглушка, по хорошему нужен класс с пулей
+    def shoot(self, player_id, shoot_strategy):  # заглушка, по хорошему нужен класс с пулей
         player = self.player_dict[player_id]
         if player.backpack["Ammo"] == 0:
             player.handle_command_list([command.BadActionCommand("shoot")])
@@ -37,7 +37,8 @@ class Board:
             if player_pool:
                 killed_player = player_pool.pop()
                 cur_cell.players.remove(killed_player)
-                self.player_dict[killed_player].handle_command_list([command.DeathCommand(cur_cell), command.RespawnCommand()])
+                self.player_dict[killed_player].handle_command_list(
+                    [command.DeathCommand(cur_cell), command.RespawnCommand()])
                 break
             cur_cell = shoot_strategy.next_cell(cur_cell)
 
