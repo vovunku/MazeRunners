@@ -93,13 +93,13 @@ class RubberRoom(Cell):
         return [command.FalseMoveCommand(self, move_strategy)]
 
     def show_accessible(self):
-        if self.left is not None and self.type == "LEFT":
+        if self.left is not None and self.exit_destination == "LEFT":
             return [self.left]
-        if self.right is not None and self.type == "RIGHT":
+        if self.right is not None and self.exit_destination == "RIGHT":
             return [self.right]
-        if self.up is not None and self.type == "UP":
-            return [self.right]
-        if self.down is not None and self.type == "DOWN":
+        if self.up is not None and self.exit_destination == "UP":
+            return [self.up]
+        if self.down is not None and self.exit_destination == "DOWN":
             return [self.down]
         return []
 

@@ -1,0 +1,17 @@
+1
+4 4
+.|S . E
+. . _ .
+. T|A .
+. _ _ .
+R . L Z
+. . . .
+.|. P .
+S Stun(2)
+T Teleport(1 2 4)
+A Armory()
+R RubberRoom(RIGHT)
+L RubberRoom(LEFT)
+Z Stun(1)
+P Teleport(1 1 1)
+E Exit(UP)

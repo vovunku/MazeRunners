@@ -144,5 +144,4 @@ class MapEditor:
                         exit_cell = unit
         if exit_cell is None:
             raise ImportError("No Exit")
-
         return self.bfs_check_map(exit_cell, game_map)
