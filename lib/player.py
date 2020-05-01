@@ -1,4 +1,5 @@
 import queue
+import lib.command as command
 
 
 class Player:
@@ -14,7 +15,7 @@ class Player:
         self.id = player_id
         self.command_log = []
         self.command_queue = queue.Queue()
-        self.move_count = 1
+        self.action_points = 1
         self.spawn_lay = spawn_lay
         self.spawn_x = spawn_x
         self.spawn_y = spawn_y
@@ -44,11 +45,14 @@ class Player:
     def get_coords(self):
         return [self.lay, self.x, self.y]
 
-    def reset(self):
-        if self.statement["Stun"] > 0:
-            self.statement["Stun"] -= 1
-            return None
-        self.move_count = 1
+    def end_of_turn(self):
+        self.action_points = 1
+        self.handle_command_list([command.StartTurnCommand()])
+
+    def spend_action(self):
+        self.action_points -= 1
+        if self.action_points == 0:
+            self.handle_command_list([command.EndTurnCommand()])
 
     def respawn(self):
         self.x = self.spawn_x
@@ -56,7 +60,11 @@ class Player:
         self.lay = self.spawn_lay
         self.backpack["Ammo"] = 0
         self.statement["Stun"] = 0
-        self.reset()
+        self.action_points = 1
 
-    def skip_turn(self):
-        self.statement["Stun"] -= 1
+    def start_turn(self):
+        if self.statement["Stun"] > 0:
+            self.statement["Stun"] -= 1
+            self.handle_command_list([command.StunSkipCommand()])
+            self.handle_command_list([command.EndTurnCommand()])
+

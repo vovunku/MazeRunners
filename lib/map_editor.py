@@ -47,10 +47,10 @@ class MapEditor:
 
         for shift in shift_for_teleports:
             (game_map[shift[0][0]]
-            [shift[0][1]]
-            [shift[0][2]]).set_shift_destination(game_map[shift[1][0]]
-                                                 [shift[1][1]]
-                                                 [shift[1][2]])
+                     [shift[0][1]]
+                     [shift[0][2]]).set_shift_destination(game_map[shift[1][0]]
+                                                                  [shift[1][1]]
+                                                                  [shift[1][2]])
 
         return game_map
 

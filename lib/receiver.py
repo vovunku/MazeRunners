@@ -46,8 +46,6 @@ class SimpleConsoleReceiver(Receiver):
             if inp[1] in self.destinations:
                 strat = self.create_strategy(inp[1])
                 return command.InputShootCommand(strat)
-        elif inp[0] == "end":
-            return command.InputEndTurnCommand()
         elif inp[0] == "help":
             return command.InputHelpCommand()
         else:

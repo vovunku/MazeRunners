@@ -12,7 +12,7 @@ class Board:
 
     def move(self, player_id, move_strategy):
         player = self.player_dict[player_id]
-        if player.move_count == 0 or player.statement["Stun"] > 0:
+        if player.action_points <= 0 or player.statement["Stun"] > 0:
             player.handle_command_list([command.BadActionCommand("move")])
             return None
         lay, x, y = player.get_coords()
@@ -20,13 +20,13 @@ class Board:
         command_list = cell.move(player_id, move_strategy)
         player.handle_command_list(command_list)
 
-    def reset(self, player_id):
+    def end_of_turn(self, player_id):
         player = self.player_dict[player_id]
-        player.reset()
+        player.end_of_turn()
 
-    def shoot(self, player_id, shoot_strategy):  # заглушка, по хорошему нужен класс с пулей
+    def shoot(self, player_id, shoot_strategy):
         player = self.player_dict[player_id]
-        if player.backpack["Ammo"] == 0:
+        if player.backpack["Ammo"] == 0 or player.action_points <= 0:
             player.handle_command_list([command.BadActionCommand("shoot")])
             return None
         player.backpack["Ammo"] -= 1
@@ -38,9 +38,13 @@ class Board:
                 killed_player = player_pool.pop()
                 cur_cell.players.remove(killed_player)
                 self.player_dict[killed_player].handle_command_list(
-                    [command.DeathCommand(cur_cell), command.RespawnCommand()])
+                    [command.DeathCommand(), command.RespawnCommand()])
+                self.player_dict[player_id].handle_command_list([command.NiceShootCommand(killed_player)])
                 break
             cur_cell = shoot_strategy.next_cell(cur_cell)
+        else:
+            self.player_dict[player_id].handle_command_list([command.BadShootCommand()])
+
 
     def respawn(self, player_id):
         player = self.player_dict[player_id]

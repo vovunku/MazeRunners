@@ -26,7 +26,7 @@ class GameFacade:
                 order_queue = player.command_queue
                 game_visitor.turn_running = True
                 while game_visitor.turn_running:
-                    while not order_queue.empty():
+                    while not order_queue.empty() and game_visitor.turn_running:
                         next_command = order_queue.get()
                         next_command.accept(game_visitor)
                     if game_visitor.turn_running and order_queue.empty():

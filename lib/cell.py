@@ -78,7 +78,7 @@ class Stun(Cell):
         self.type = "Stun"
 
     def activate(self):
-        return [command.StunCommand(self)]
+        return [command.StunCommand(self.stun_duration)]
 
 
 class RubberRoom(Cell):
@@ -118,7 +118,10 @@ class Teleport(Cell):
         self.shift_destination = shift_destination
 
     def activate(self):
-        return [command.TeleportCommand(self)]
+        lay = self.shift_destination.lay
+        x = self.shift_destination.x
+        y = self.shift_destination.y
+        return [command.TeleportCommand(lay, x, y)]
 
 
 class Armory(Cell):
@@ -128,7 +131,7 @@ class Armory(Cell):
         self.ammunition = ammunition
 
     def activate(self):
-        return [command.ArmoryCommand(self)]
+        return [command.ArmoryCommand(self.ammunition)]
 
 
 class Exit(Cell):
@@ -139,5 +142,5 @@ class Exit(Cell):
 
     def move(self, player_id, move_strategy):
         if move_strategy.type == self.exit_destination:
-            return [command.ExitCommand(self)]
-        return super().move()
+            return [command.ExitCommand()]
+        return super().move(player_id, move_strategy)
