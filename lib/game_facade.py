@@ -49,7 +49,8 @@ class GameFacade:
         n = int(start_info[0])
         players = dict()
         for p_id in range(n):
-            self.display.message("Insert spawn position of player {0}".format(p_id + 1)) # TODO контектстный менеджер на обработку ошибок
+            self.display.message("Insert spawn position of player {0}".format(
+                p_id + 1))  # TODO контектстный менеджер на обработку ошибок
             self.display.message("input format: <Name> <lay> <x> <y>")
             player_name, spawn_lay, spawn_x, spawn_y = self.receiver.handle_string()
             if player_name in players:

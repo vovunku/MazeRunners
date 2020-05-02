@@ -45,7 +45,6 @@ class Board:
         else:
             self.player_dict[player_id].handle_command_list([command.BadShootCommand()])
 
-
     def respawn(self, player_id):
         player = self.player_dict[player_id]
         lay, x, y = player.get_coords()
