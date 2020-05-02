@@ -1,4 +1,7 @@
 import unittest
+import sys
+
+sys.path.append('..')
 import lib.cell as cell
 import lib.move_strategy as move_strategy
 import lib.command as command
