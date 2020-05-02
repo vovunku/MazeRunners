@@ -31,14 +31,14 @@ class TestCellMethods(unittest.TestCase):
 
         self.respawn_test_unit()
 
-
     def respawn_test_unit(self):
         for test_cell in self.cells.values():
             test_cell.handle_player("test_unit")
 
     def set_dummy_neighbours(self):
         for test_cell in self.cells.values():
-            test_cell.set_neighbour(LEFT=self.dummy_cells["LEFT"], RIGHT=self.dummy_cells["RIGHT"], UP=self.dummy_cells["UP"], DOWN=self.dummy_cells["DOWN"])
+            test_cell.set_neighbour(LEFT=self.dummy_cells["LEFT"], RIGHT=self.dummy_cells["RIGHT"],
+                                    UP=self.dummy_cells["UP"], DOWN=self.dummy_cells["DOWN"])
 
     def test_move_method(self):
         for strat_type, strat in self.strategies.items():
@@ -63,6 +63,7 @@ class TestCellMethods(unittest.TestCase):
                 else:
                     self.assertIsInstance(test_cell.move("test_unit", strat)[0], command.MoveCommand)
         self.respawn_test_unit()
+
 
 if __name__ == "__main__":
     unittest.main()
