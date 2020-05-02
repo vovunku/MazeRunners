@@ -5,9 +5,15 @@ import lib.command as command
 class DestinationStrategy:
     """To avoid copypasta(strategy pattern)"""
 
-    @abstractmethod
     def cell_move(self, cell, user_id):
-        pass
+        next_cell = self.next_cell(cell)
+        if next_cell is None:
+            return [command.WallStopCommand(self)]
+        cell.release_player(user_id)
+        next_cell.handle_player(user_id)
+        command_list = next_cell.activate()
+        command_list.insert(0, command.MoveCommand(cell.type, self))
+        return command_list
 
     @abstractmethod
     def player_move(self, player):
@@ -22,13 +28,6 @@ class ActLeft(DestinationStrategy):
     def __init__(self):
         self.type = "LEFT"
 
-    def cell_move(self, cell, user_id):
-        if cell.left is None:
-            return [command.WallStopCommand(self)]
-        command_list = cell.left.activate()
-        command_list.insert(0, command.MoveCommand(cell.type, self))
-        return command_list
-
     def player_move(self, player):
         lay, x, y = player.get_coords()
         player.set_coords(lay, x, y - 1)
@@ -40,13 +39,6 @@ class ActLeft(DestinationStrategy):
 class ActRight(DestinationStrategy):
     def __init__(self):
         self.type = "RIGHT"
-
-    def cell_move(self, cell, user_id):
-        if cell.right is None:
-            return [command.WallStopCommand(self)]
-        command_list = cell.right.activate()
-        command_list.insert(0, command.MoveCommand(cell.type, self))
-        return command_list
 
     def player_move(self, player):
         lay, x, y = player.get_coords()
@@ -60,13 +52,6 @@ class ActUp(DestinationStrategy):
     def __init__(self):
         self.type = "UP"
 
-    def cell_move(self, cell, user_id):
-        if cell.up is None:
-            return [command.WallStopCommand(self)]
-        command_list = cell.up.activate()
-        command_list.insert(0, command.MoveCommand(cell.type, self))
-        return command_list
-
     def player_move(self, player):
         lay, x, y = player.get_coords()
         player.set_coords(lay, x - 1, y)
@@ -78,13 +63,6 @@ class ActUp(DestinationStrategy):
 class ActDown(DestinationStrategy):
     def __init__(self):
         self.type = "DOWN"
-
-    def cell_move(self, cell, user_id):
-        if cell.down is None:
-            return [command.WallStopCommand(self)]
-        command_list = cell.down.activate()
-        command_list.insert(0, command.MoveCommand(cell.type, self))
-        return command_list
 
     def player_move(self, player):
         lay, x, y = player.get_coords()

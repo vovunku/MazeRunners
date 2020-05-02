@@ -9,7 +9,7 @@ class Cell:
             self.items = items
         self.type = "Base"
         self.left = kwargs.get("LEFT", None)
-        self.right = kwargs.get("RIGHt", None)
+        self.right = kwargs.get("RIGHT", None)
         self.up = kwargs.get("UP", None)
         self.down = kwargs.get("DOWN", None)
         self.storage = []
@@ -63,6 +63,12 @@ class Cell:
         if self.down is not None:
             ans.append(self.down)
         return ans
+
+    def release_player(self, player_id):
+        self.players.remove(player_id)
+
+    def handle_player(self, player_id):
+        self.players.add(player_id)
 
 
 class Empty(Cell):
@@ -118,6 +124,9 @@ class Teleport(Cell):
         self.shift_destination = shift_destination
 
     def activate(self):
+        while len(self.players) != 0:
+            player_id = self.players.pop()
+            self.shift_destination.handle_player(player_id)
         lay = self.shift_destination.lay
         x = self.shift_destination.x
         y = self.shift_destination.y
@@ -142,5 +151,6 @@ class Exit(Cell):
 
     def move(self, player_id, move_strategy):
         if move_strategy.type == self.exit_destination:
+            self.release_player(player_id)
             return [command.ExitCommand()]
         return super().move(player_id, move_strategy)

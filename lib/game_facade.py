@@ -52,6 +52,8 @@ class GameFacade:
             self.display.message("Insert spawn position of player {0}".format(p_id + 1)) # TODO контектстный менеджер на обработку ошибок
             self.display.message("input format: <Name> <lay> <x> <y>")
             player_name, spawn_lay, spawn_x, spawn_y = self.receiver.handle_string()
+            if player_name in players:
+                raise ValueError("such player already exist")
             spawn_lay = int(spawn_lay) - 1
             spawn_x = int(spawn_x) - 1
             spawn_y = int(spawn_y) - 1
