@@ -25,12 +25,15 @@ jobs:
     
     - name: Test
       run: |
+        mkdir results
+        cd results
+        touch output.txt 
+        cd ..
         cd tests
-        touch output.txt
-        python3 unit_tests.py > output.txt
+        python3 unit_tests.py > ../results/output.txt
     
     - name: UploadArtifacts
       uses: actions/upload-artifact@v1.0.0
       with:
         name: TestResults
-        path: dev/tests/output.txt
+        path: results
