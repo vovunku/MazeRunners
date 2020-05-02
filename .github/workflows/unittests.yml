@@ -25,7 +25,6 @@ jobs:
     
     - name: Test
       run: |
-        cd dev
         cd tests
         touch output.txt
         python3 unit_tests.py > output.txt
