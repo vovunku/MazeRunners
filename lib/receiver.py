@@ -42,11 +42,17 @@ class SimpleConsoleReceiver(Receiver):
             if inp[1] in self.destinations:
                 strat = self.create_strategy(inp[1])
                 return command.InputMoveCommand(strat)
+            else:
+                raise KeyError("Invalid input")
         elif inp[0] == "shoot":
             if inp[1] in self.destinations:
                 strat = self.create_strategy(inp[1])
                 return command.InputShootCommand(strat)
+            else:
+                raise KeyError("Invalid input")
         elif inp[0] == "help":
             return command.InputHelpCommand()
+        elif inp[0] == "backpack":
+            return command.InputBackpackCommand()
         else:
             raise KeyError("Invalid input")

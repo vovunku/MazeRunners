@@ -24,9 +24,9 @@ class ActLeft(DestinationStrategy):
 
     def cell_move(self, cell, user_id):
         if cell.left is None:
-            return [command.WallStopCommand(cell, self)]
+            return [command.WallStopCommand(self)]
         command_list = cell.left.activate()
-        command_list.insert(0, command.MoveCommand(cell, self))
+        command_list.insert(0, command.MoveCommand(cell.type, self))
         return command_list
 
     def player_move(self, player):
@@ -43,9 +43,9 @@ class ActRight(DestinationStrategy):
 
     def cell_move(self, cell, user_id):
         if cell.right is None:
-            return [command.WallStopCommand(cell, self)]
+            return [command.WallStopCommand(self)]
         command_list = cell.right.activate()
-        command_list.insert(0, command.MoveCommand(cell, self))
+        command_list.insert(0, command.MoveCommand(cell.type, self))
         return command_list
 
     def player_move(self, player):
@@ -62,9 +62,9 @@ class ActUp(DestinationStrategy):
 
     def cell_move(self, cell, user_id):
         if cell.up is None:
-            return [command.WallStopCommand(cell, self)]
+            return [command.WallStopCommand(self)]
         command_list = cell.up.activate()
-        command_list.insert(0, command.MoveCommand(cell, self))
+        command_list.insert(0, command.MoveCommand(cell.type, self))
         return command_list
 
     def player_move(self, player):
@@ -81,9 +81,9 @@ class ActDown(DestinationStrategy):
 
     def cell_move(self, cell, user_id):
         if cell.down is None:
-            return [command.WallStopCommand(cell, self)]
+            return [command.WallStopCommand(self)]
         command_list = cell.down.activate()
-        command_list.insert(0, command.MoveCommand(cell, self))
+        command_list.insert(0, command.MoveCommand(cell.type, self))
         return command_list
 
     def player_move(self, player):

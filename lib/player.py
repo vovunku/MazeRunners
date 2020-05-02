@@ -16,6 +16,7 @@ class Player:
         self.command_log = []
         self.command_queue = queue.Queue()
         self.action_points = 1
+        self.stun_points = 0
         self.spawn_lay = spawn_lay
         self.spawn_x = spawn_x
         self.spawn_y = spawn_y
@@ -28,6 +29,7 @@ class Player:
 
     def stun(self, duration):
         self.statement["Stun"] = duration
+        self.stun_points += duration
 
     def receive_ammo(self, ammunition):
         self.backpack["Ammo"] = max(self.backpack["Ammo"], ammunition)
@@ -47,7 +49,6 @@ class Player:
 
     def end_of_turn(self):
         self.action_points = 1
-        self.handle_command_list([command.StartTurnCommand()])
 
     def spend_action(self):
         self.action_points -= 1
@@ -60,11 +61,13 @@ class Player:
         self.lay = self.spawn_lay
         self.backpack["Ammo"] = 0
         self.statement["Stun"] = 0
+        self.stun_points = 1
         self.action_points = 1
 
     def start_turn(self):
-        if self.statement["Stun"] > 0:
-            self.statement["Stun"] -= 1
+        if self.stun_points > 0:
+            if self.statement["Stun"] > 0:
+                self.statement["Stun"] -= 1
+            self.stun_points -= 1
             self.handle_command_list([command.StunSkipCommand()])
             self.handle_command_list([command.EndTurnCommand()])
-

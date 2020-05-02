@@ -37,7 +37,7 @@ class ConsoleDisplay(Display):
         print("{:<80}".format("DESTINATION - {LEFT, RIGHT, UP, DOWN}"))
         print("{:<80}".format("to shoot type - \"shoot\" <DESTINATION>"))
         print("{:<80}".format("to move - \"move\" <DESTINATION>"))
-        print("{:<80}".format("to end phase - \"end\""))
+        print("{:<80}".format("to check backpack - \"backpack\""))
         print("{:<80}".format("to see help - \"help\""))
 
     def map_list(self, map_list):

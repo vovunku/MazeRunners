@@ -175,7 +175,7 @@ class StunSkipCommand(EnvCommand):
         visitor.visit_stun_skip_c(self)
 
     def execute(self, player):
-        return player.statement
+        return player.stun_points
 
 
 class NiceShootCommand(EnvCommand):

@@ -50,3 +50,6 @@ class Board:
         player = self.player_dict[player_id]
         lay, x, y = player.get_coords()
         self.game_map[lay][x][y].players.add(player_id)
+
+    def start_turn(self, player_id):
+        self.player_dict[player_id].handle_command_list([command.StartTurnCommand()])

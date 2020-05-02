@@ -58,7 +58,7 @@ class GameVisitor:
 
     def visit_i_help_c(self, command):
         self.display.help()
-        command.execute(player)
+        command.execute(self.player)
 
     def visit_respawn_c(self, command):
         self.display.message("{0} player has been respawned".format(self.player.id))
@@ -87,11 +87,11 @@ class GameVisitor:
         command.execute(self.player)
 
     def visit_stun_skip_c(self, command):
-        remain = command.execute(self.player)["Stun"]
-        self.display.message("Stun! {0} turns remain!".format(remain))
+        remain = command.execute(self.player)
+        self.display.message("You skip turn! {0} turns to skip remain!".format(remain))
 
     def visit_nice_shoot_c(self, command):
-        self.display.message("Nice shoot! You have shooted player {0}".format(command.aim_id))
+        self.display.message("Nice shoot! You have shot player {0}".format(command.aim_id))
         command.execute(self.player)
 
     def visit_bad_shoot_c(self, command):

@@ -90,7 +90,7 @@ class RubberRoom(Cell):
     def move(self, player_id, move_strategy):
         if move_strategy.type == self.exit_destination:
             return move_strategy.cell_move(self, player_id)
-        return [command.FalseMoveCommand(self, move_strategy)]
+        return [command.FalseMoveCommand(move_strategy)]
 
     def show_accessible(self):
         if self.left is not None and self.exit_destination == "LEFT":
