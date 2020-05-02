@@ -30,7 +30,7 @@ jobs:
         touch output.txt 
         cd ..
         cd tests
-        python3 unit_tests.py > ../results/output.txt
+        python3 unit_tests.py | tee ../results/output.txt
     
     - name: UploadArtifacts
       uses: actions/upload-artifact@v1.0.0
