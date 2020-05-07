@@ -13,29 +13,40 @@ class EditorFacade:
         running = True
         self.display_help()
         while running:
-            inp = self.receiver.handle_string()
-            cmd_num = int(inp[0])
-            if cmd_num == 1:
-                self.check_map(inp[1])
-            if cmd_num == 2:
-                correct = self.check_map(inp[1])
-                if correct:
-                    self.add_map(inp[1])
-                    self.display.message("Map added")
-                else:
-                    self.display.message("Map wasn\'t added")
+            try:
+                inp = self.receiver.handle_string()
+                cmd_num = int(inp[0])
+                if cmd_num == 1:
+                    self.check_map(inp[1])
+                if cmd_num == 2:
+                    correct = self.check_map(inp[1])
+                    if correct:
+                        self.add_map(inp[1])
+                        self.display.message("Map added")
+                    else:
+                        self.display.message("Map wasn\'t added")
+                if cmd_num == 3:
+                    running = False
+            except Exception as err:
+                self.display.message("Incorrect input")
+                self.display.message(str(err))
 
     def choose_map(self):
-        self.display.message("Please choose map from list. To choose - type the number of map in the list")
-        map_list = self.map_manager.get_map_list()
-        self.display.map_list(map_list)
-        inp = self.receiver.handle_string()
-        map_id = int(inp[0]) - 1
-        if map_id >= len(map_list):
-            raise KeyError("Incorrect number")
-        map_path = self.map_manager.get_map(map_id)
-        raw_map = self.map_manager.read_map_file(map_path)
-        return self.map_editor.read_map(raw_map)
+        while True:
+            try:
+                self.display.message("Please choose map from list. To choose - type the number of map in the list")
+                map_list = self.map_manager.get_map_list()
+                self.display.map_list(map_list)
+                inp = self.receiver.handle_string()
+                map_id = int(inp[0]) - 1
+                if map_id >= len(map_list):
+                    raise KeyError("Incorrect number")
+                map_path = self.map_manager.get_map(map_id)
+                raw_map = self.map_manager.read_map_file(map_path)
+                return self.map_editor.read_map(raw_map)
+            except Exception as err:
+                self.display.message("Incorrect input")
+                self.display.message(str(err))
 
     def add_map(self, map_path):
         self.map_manager.add_map_file(map_path)
@@ -44,6 +55,7 @@ class EditorFacade:
         self.display.message("There are opportunities:")
         self.display.message("1 - Check map(you should provide path)")
         self.display.message("2 - Add map(also path needed)")
+        self.display.message("3 - Exit")
         self.display.message("To choose command, please, write: <number> <optional> <optional> ...")
 
     def check_map(self, filename):

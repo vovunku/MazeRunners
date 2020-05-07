@@ -10,12 +10,10 @@ class MenuFacade:
         self.display = display
         self.editor_body = editor_facade.EditorFacade(receiver, display, lib_path)
         self.game_body = game_facade.GameFacade(receiver, display)
-        self.running = False
 
     def start_main_loop(self):
-        self.running = True
         self.display.menu()
-        while self.running:
+        while True:
             inp = self.receiver.handle_string()
             if inp[0] == "1":
                 self.display.message("Choose map")
@@ -30,5 +28,8 @@ class MenuFacade:
                 self.editor_body.edit_loop()
             elif inp[0] == "3":
                 self.display.message("See you later!")
-                self.running = False
+                break
+            else:
+                self.display.message("Incorrect input")
+                continue
             self.display.menu()

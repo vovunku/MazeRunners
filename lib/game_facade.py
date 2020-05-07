@@ -43,22 +43,40 @@ class GameFacade:
     def initialize(self):
         if self.game_map is None:
             raise ValueError("No map provided")
-        self.display.message("Insert players information")
-        self.display.message("Insert players quantity")
-        start_info = self.receiver.handle_string()
-        n = int(start_info[0])
+        while True:
+            try:
+                self.display.message("Insert players information")
+                self.display.message("Insert players quantity")
+                start_info = self.receiver.handle_string()
+                n = int(start_info[0])
+                break
+            except Exception as err:
+                self.display.message("Incorrect input")
+                self.display.message(str(err))
         players = dict()
         for p_id in range(n):
-            self.display.message("Insert spawn position of player {0}".format(
-                p_id + 1))  # TODO контектстный менеджер на обработку ошибок
-            self.display.message("input format: <Name> <lay> <x> <y>")
-            player_name, spawn_lay, spawn_x, spawn_y = self.receiver.handle_string()
-            if player_name in players:
-                raise ValueError("such player already exist")
-            spawn_lay = int(spawn_lay) - 1
-            spawn_x = int(spawn_x) - 1
-            spawn_y = int(spawn_y) - 1
-            players[player_name] = player.Player(spawn_lay, spawn_x, spawn_y, spawn_lay, spawn_x, spawn_y, player_name)
+            while True:
+                try:
+                    self.display.message("Insert spawn position of player {0}".format(p_id + 1))
+                    self.display.message("input format: <Name> <lay> <x> <y>")
+                    player_name, spawn_lay, spawn_x, spawn_y = self.receiver.handle_string()
+                    if player_name in players:
+                        raise ValueError("such player already exist")
+                    spawn_lay = int(spawn_lay) - 1
+                    spawn_x = int(spawn_x) - 1
+                    spawn_y = int(spawn_y) - 1
+                    if spawn_lay < 0 or spawn_lay > len(self.game_map):
+                        raise ValueError("lay coord is invalid")
+                    if spawn_x < 0 or spawn_x > len(self.game_map[spawn_lay]):
+                        raise ValueError("y coord is invalid")
+                    if spawn_y < 0 or spawn_y > len(self.game_map[spawn_lay][spawn_x]):
+                        raise ValueError("y coord is invalid")
+                    players[player_name] = player.Player(spawn_lay, spawn_x, spawn_y, spawn_lay, spawn_x, spawn_y,
+                                                         player_name)
+                    break
+                except Exception as err:
+                    self.display.message("Incorrect input")
+                    self.display.message(str(err))
         self.players = players
         self.board = board.Board(self.game_map, players)
 
