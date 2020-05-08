@@ -16,7 +16,7 @@ demist 1 3 3
 Пример:
 help  
 move DOWN  
-shoot RIGHT 
+shoot RIGHT  
 backpack
 
 Когда игра заканчивается - все выбрасывается в меню
