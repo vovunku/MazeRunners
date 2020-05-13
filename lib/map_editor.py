@@ -116,7 +116,7 @@ class MapEditor:
         while not pool.empty():
             cur_cell = pool.get()
             visited[cur_cell.lay][cur_cell.x][cur_cell.y] = True
-            neighbours = cur_cell.show_accessible()
+            neighbours = cur_cell.get_accessible()
             for next_cell in neighbours:
                 if not visited[next_cell.lay][next_cell.x][next_cell.y]:
                     pool.put(next_cell)

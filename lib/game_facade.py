@@ -38,7 +38,7 @@ class GameFacade:
                                 player.handle_command_list([new_command])
                                 incorrect = False
                             except Exception as err:
-                                self.display.message("Error: {0}".format(str(err)))
+                                self.display.message("Error: {0}".format(err))
 
     def initialize(self):
         if self.game_map is None:
@@ -48,16 +48,16 @@ class GameFacade:
                 self.display.message("Insert players information")
                 self.display.message("Insert players quantity")
                 start_info = self.receiver.handle_string()
-                n = int(start_info[0])
+                player_quantity = int(start_info[0])
                 break
             except Exception as err:
                 self.display.message("Incorrect input")
                 self.display.message(str(err))
         players = dict()
-        for p_id in range(n):
+        for player_id in range(player_quantity):
             while True:
                 try:
-                    self.display.message("Insert spawn position of player {0}".format(p_id + 1))
+                    self.display.message("Insert spawn position of player {0}".format(player_id + 1))
                     self.display.message("input format: <Name> <lay> <x> <y>")
                     player_name, spawn_lay, spawn_x, spawn_y = self.receiver.handle_string()
                     if player_name in players:

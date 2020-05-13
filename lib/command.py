@@ -204,7 +204,7 @@ class BadShootCommand(EnvCommand):
 
 
 class GameCommand(ABC):
-    """Interface for commands from user to player"""
+    """Interface for commands from external user to player"""
 
     @abstractmethod
     def accept(self, visitor):

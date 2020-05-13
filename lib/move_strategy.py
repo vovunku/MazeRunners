@@ -11,7 +11,7 @@ class DestinationStrategy:
             return [command.WallStopCommand(self)]
         cell.release_player(user_id)
         next_cell.handle_player(user_id)
-        command_list = next_cell.activate()
+        command_list = next_cell.activate_on_step()
         command_list.insert(0, command.MoveCommand(type(cell).__name__, self))
         return command_list
 

@@ -72,5 +72,5 @@ class EditorFacade:
                                                                                              result[2] + 1))
                 return False
         except Exception as err:
-            self.display.message("Error: {0}".format(str(err)))
+            self.display.message("Error: {0}".format(err))
             return False
