@@ -6,7 +6,6 @@ class Player:
     """Simplest player"""
 
     def __init__(self, spawn_lay, spawn_x, spawn_y, lay, x, y, player_id):
-        self.type = "Base"
         self.backpack = {"Ammo": 0}
         self.statement = {"Stun": 0}
         self.lay = lay

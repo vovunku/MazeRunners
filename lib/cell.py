@@ -4,7 +4,6 @@ import lib.command as command
 class Cell:
     def __init__(self, items=None, **kwargs):
         self.items = items or []
-        self.type = "Base"
         self.set_neighbour(**kwargs)
         self.storage = []
         self.set_coords(kwargs.get("lay", 0), kwargs.get("x", 0), kwargs.get("y", 0))
@@ -32,9 +31,6 @@ class Cell:
         self.right = kwargs.get("RIGHT")
         self.up = kwargs.get("UP")
         self.down = kwargs.get("DOWN")
-
-    def __repr__(self):
-        return self.type[:2]
 
     def set_coords(self, lay, x, y):
         self.lay = lay
@@ -66,14 +62,12 @@ class Cell:
 class Empty(Cell):
     def __init__(self):
         super().__init__()
-        self.type = "Empty"
 
 
 class Stun(Cell):
     def __init__(self, stun_duration, items=None, **kwargs):
         super().__init__(items, **kwargs)
         self.stun_duration = stun_duration
-        self.type = "Stun"
 
     def activate(self):
         return [command.StunCommand(self.stun_duration)]
@@ -83,10 +77,9 @@ class RubberRoom(Cell):
     def __init__(self, exit_destination, items=None, **kwargs):
         super().__init__(items, **kwargs)
         self.exit_destination = exit_destination
-        self.type = "RubberRoom"
 
     def move(self, player_id, move_strategy):
-        if move_strategy.type == self.exit_destination:
+        if str(move_strategy) == self.exit_destination:
             return move_strategy.cell_move(self, player_id)
         return [command.FalseMoveCommand(move_strategy)]
 
@@ -106,7 +99,6 @@ class Teleport(Cell):
     def __init__(self, shift_destination, items=None, **kwargs):
         super().__init__(items, **kwargs)
         self.shift_destination = shift_destination
-        self.type = "Teleport"
 
     def show_accessible(self):
         ans = [self.shift_destination]
@@ -128,7 +120,6 @@ class Teleport(Cell):
 class Armory(Cell):
     def __init__(self, ammunition=3, items=None, **kwargs):
         super().__init__(items, **kwargs)
-        self.type = "Armory"
         self.ammunition = ammunition
 
     def activate(self):
@@ -139,10 +130,9 @@ class Exit(Cell):
     def __init__(self, exit_destination, items=None, **kwargs):
         super().__init__(items, **kwargs)
         self.exit_destination = exit_destination
-        self.type = "Exit"
 
     def move(self, player_id, move_strategy):
-        if move_strategy.type == self.exit_destination:
+        if str(move_strategy) == self.exit_destination:
             self.release_player(player_id)
             return [command.ExitCommand()]
         return super().move(player_id, move_strategy)

@@ -7,9 +7,6 @@ import lib.command as command
 class Receiver(ABC):
     """Receiver interface"""
 
-    def __init__(self):
-        self.type = "Abstract"
-
     @abstractmethod
     def handle_string(self):
         pass
@@ -19,7 +16,6 @@ class SimpleConsoleReceiver(Receiver):
     """Console receiver with only text input (no keys supported)"""
 
     def __init__(self):
-        self.type = "Console"
         self.destinations = {"LEFT", "RIGHT", "UP", "DOWN"}
 
     def handle_string(self):

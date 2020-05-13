@@ -67,8 +67,8 @@ class ExitCommand(EnvCommand):
 class MoveCommand(EnvCommand):
     """Command for standard move"""
 
-    def __init__(self, type, move_strategy):
-        self.type = type
+    def __init__(self, cell_type, move_strategy):
+        self.cell_type = cell_type
         self.move_strategy = move_strategy
 
     def accept(self, visitor):
@@ -138,8 +138,8 @@ class StartTurnCommand(EnvCommand):
 class BadActionCommand(EnvCommand):
     """Command for undone action"""
 
-    def __init__(self, type):
-        self.type = type
+    def __init__(self, act_type):
+        self.act_type = act_type
 
     def accept(self, visitor):
         visitor.visit_bad_action_move_c(self)

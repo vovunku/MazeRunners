@@ -35,19 +35,19 @@ class GameVisitor:
 
     def visit_move_c(self, command):
         self.display.message(
-            "{0} successfully moved {1}".format(self.player.id, command.move_strategy.type.lower()))
-        if command.type == "RubberRoom":
+            "{0} successfully moved {1}".format(self.player.id, str(command.move_strategy).lower()))
+        if command.cell_type == "RubberRoom":
             self.display.message("{0} successfully exited Rubber Room".format(self.player.id))
         command.execute(self.player)
 
     def visit_false_move_c(self, command):
         self.display.message(
-            "{0} successfully moved {1}".format(self.player.id, command.move_strategy.type.lower()))
+            "{0} successfully moved {1}".format(self.player.id, str(command.move_strategy).lower()))
         command.execute(self.player)
 
     def visit_wall_stop_c(self, command):
         self.display.message(
-            "{0} didn't move {1} because of wall".format(self.player.id, command.move_strategy.type.lower()))
+            "{0} didn't move {1} because of wall".format(self.player.id, str(command.move_strategy).lower()))
         command.execute(self.player)
 
     def visit_i_move_c(self, command):
@@ -69,7 +69,7 @@ class GameVisitor:
         command.execute(self.player)
 
     def visit_bad_action_move_c(self, command):
-        self.display.message("{0}: bad action; type - {1}".format(self.player.id, command.type))
+        self.display.message("{0}: bad action; type - {1}".format(self.player.id, command.act_type))
         command.execute(self.player)
 
     def visit_i_backpack_c(self, command):

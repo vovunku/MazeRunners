@@ -140,7 +140,7 @@ class MapEditor:
         for lay in game_map:
             for row in lay:
                 for unit in row:
-                    if unit.type == "Exit":
+                    if type(unit).__name__ == "Exit":
                         exit_cell = unit
         if exit_cell is None:
             raise ImportError("No Exit")

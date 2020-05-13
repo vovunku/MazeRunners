@@ -12,7 +12,7 @@ class DestinationStrategy:
         cell.release_player(user_id)
         next_cell.handle_player(user_id)
         command_list = next_cell.activate()
-        command_list.insert(0, command.MoveCommand(cell.type, self))
+        command_list.insert(0, command.MoveCommand(type(cell).__name__, self))
         return command_list
 
     @abstractmethod
@@ -25,8 +25,6 @@ class DestinationStrategy:
 
 
 class ActLeft(DestinationStrategy):
-    def __init__(self):
-        self.type = "LEFT"
 
     def player_move(self, player):
         lay, x, y = player.get_coords()
@@ -35,10 +33,11 @@ class ActLeft(DestinationStrategy):
     def next_cell(self, cell):
         return cell.left
 
+    def __str__(self):
+        return "LEFT"
+
 
 class ActRight(DestinationStrategy):
-    def __init__(self):
-        self.type = "RIGHT"
 
     def player_move(self, player):
         lay, x, y = player.get_coords()
@@ -47,10 +46,10 @@ class ActRight(DestinationStrategy):
     def next_cell(self, cell):
         return cell.right
 
+    def __str__(self):
+        return "RIGHT"
 
 class ActUp(DestinationStrategy):
-    def __init__(self):
-        self.type = "UP"
 
     def player_move(self, player):
         lay, x, y = player.get_coords()
@@ -59,10 +58,10 @@ class ActUp(DestinationStrategy):
     def next_cell(self, cell):
         return cell.up
 
+    def __str__(self):
+        return "UP"
 
 class ActDown(DestinationStrategy):
-    def __init__(self):
-        self.type = "DOWN"
 
     def player_move(self, player):
         lay, x, y = player.get_coords()
@@ -70,3 +69,6 @@ class ActDown(DestinationStrategy):
 
     def next_cell(self, cell):
         return cell.down
+
+    def __str__(self):
+        return "DOWN"

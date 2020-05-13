@@ -5,9 +5,6 @@ import os
 class Display(ABC):
     """Display interface"""
 
-    def __init__(self):
-        self.type = "Abstract"
-
     @abstractmethod
     def menu(self):
         pass
@@ -22,7 +19,6 @@ class ConsoleDisplay(Display):
 
     def __init__(self):
         super().__init__()
-        self.type = "Console"
 
     def menu(self):
         print("{:=^80}".format("Welcome to MazeRunners!"))
