@@ -12,7 +12,7 @@ class TestCellMethods(unittest.TestCase):
         self.cells = {
             "Empty": cell.Empty(),
             "Stun": cell.Stun(2),
-            "Teleport": cell.Teleport(cell.Stun(2)),
+            "Teleport": cell.Teleport(0, 0, 0, cell.Stun(2)),
             "Rubber": cell.RubberRoom("RIGHT"),
             "Exit": cell.Exit("UP"),
             "Armory": cell.Armory(3)

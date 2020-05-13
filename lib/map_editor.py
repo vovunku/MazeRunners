@@ -104,7 +104,6 @@ class MapEditor:
         return None
 
     def bfs_check_map(self, exit_cell, game_map):
-        ans = []
         for layer_id, layer in enumerate(game_map):
             for x, row in enumerate(layer):
                 for y, checked in enumerate(row):
@@ -121,5 +120,5 @@ class MapEditor:
                     if type(unit).__name__ == "Exit":
                         exit_cell = unit
         if exit_cell is None:
-            raise ImportError("No Exit")
+            assert False, "No Exit"
         return self.bfs_check_map(exit_cell, game_map)
