@@ -13,10 +13,8 @@ class ConsoleMapManager:
                 self.map_list.append(related_path)
 
     def read_map_file(self, filename):
-        ans_map = []
         with open(filename, 'r') as file:
-            for line in file:
-                ans_map.append(line.strip())
+            ans_map = [line.strip() for line in file]
         return ans_map
 
     def get_map_list(self):

@@ -43,7 +43,7 @@ class EditorFacade:
                     raise KeyError("Incorrect number")
                 map_path = self.map_manager.get_map(map_id)
                 raw_map = self.map_manager.read_map_file(map_path)
-                return self.map_editor.read_map(raw_map)
+                return self.map_editor.translate_raw_map(raw_map)
             except Exception as err:
                 self.display.message("Incorrect input")
                 self.display.message(str(err))
@@ -60,7 +60,7 @@ class EditorFacade:
 
     def check_map(self, filename):
         raw_map = self.map_manager.read_map_file(filename)
-        game_map = self.map_editor.read_map(raw_map)
+        game_map = self.map_editor.translate_raw_map(raw_map)
         try:
             result = self.map_editor.check_map(game_map)
             if result is None:

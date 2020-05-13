@@ -1,4 +1,4 @@
-import queue
+from queue import Queue
 import lib.command as command
 
 
@@ -13,7 +13,7 @@ class Player:
         self.y = y
         self.id = player_id
         self.command_log = []
-        self.command_queue = queue.Queue()
+        self.command_queue = Queue()
         self.action_points = 1
         self.stun_points = 0
         self.spawn_lay = spawn_lay
@@ -68,5 +68,4 @@ class Player:
             if self.statement["Stun"] > 0:
                 self.statement["Stun"] -= 1
             self.stun_points -= 1
-            self.handle_command_list([command.StunSkipCommand()])
-            self.handle_command_list([command.EndTurnCommand()])
+            self.handle_command_list([command.StunSkipCommand(), command.EndTurnCommand()])

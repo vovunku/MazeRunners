@@ -21,24 +21,28 @@ class GameFacade:
             for player_id, player in self.players.items():
                 if not game_visitor.game_running:
                     break
-                self.display.message("{0} player turn started".format(player_id))
-                game_visitor.set_player(player)
-                self.Game.start_turn(player_id)
-                order_queue = player.command_queue
-                game_visitor.turn_running = True
-                while game_visitor.turn_running:
-                    while not order_queue.empty() and game_visitor.turn_running:
-                        next_command = order_queue.get()
-                        next_command.accept(game_visitor)
-                    if game_visitor.turn_running and order_queue.empty():
-                        incorrect = True
-                        while incorrect:
-                            try:
-                                new_command = self.receiver.handle_game_command()
-                                player.handle_command_list([new_command])
-                                incorrect = False
-                            except Exception as err:
-                                self.display.message("Error: {0}".format(err))
+                self.make_turn(game_visitor, player_id, player)
+
+    def make_turn(self, game_visitor, player_id, player):
+        self.display.message("{0} player turn started".format(player_id))
+        game_visitor.set_player(player)
+        self.Game.start_turn(player_id)
+        order_queue = player.command_queue
+        game_visitor.turn_running = True
+        while game_visitor.turn_running:
+            while not order_queue.empty() and game_visitor.turn_running:
+                next_command = order_queue.get()
+                next_command.accept(game_visitor)
+            if game_visitor.turn_running and order_queue.empty():
+                incorrect = True
+                while incorrect:
+                    try:
+                        new_command = self.receiver.handle_game_command()
+                        player.handle_command_list([new_command])
+                        incorrect = False
+                    except Exception as err:
+                        self.display.message("Error: {0}".format(err))
+
 
     def initialize(self):
         if self.game_map is None:

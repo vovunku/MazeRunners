@@ -8,7 +8,7 @@ from queue import Queue
 class MapEditor:
     """Module between map manager and other modules"""
 
-    def read_map(self, raw_map):
+    def translate_raw_map(self, raw_map):
         maps_count = int(raw_map[0])
         types_gen = self.get_types(raw_map)
         file_it = 1
@@ -106,11 +106,7 @@ class MapEditor:
             down.up = up
 
     def bfs_check_cell(self, lay, x, y, dest_lay, dest_x, dest_y, game_map):
-        visited = []
-        for l, layer in enumerate(game_map):
-            visited.append([])
-            for row in layer:
-                visited[l].append([False for _ in range(len(row))])
+        visited = [[[False for _ in range(len(row))] for row in layer] for layer in game_map]
         pool = Queue()
         pool.put(game_map[lay][x][y])
         while not pool.empty():
@@ -127,10 +123,10 @@ class MapEditor:
 
     def bfs_check_map(self, exit_cell, game_map):
         ans = []
-        for l, layer in enumerate(game_map):
+        for layer_id, layer in enumerate(game_map):
             for x, row in enumerate(layer):
                 for y, checked in enumerate(row):
-                    problematic_cell = self.bfs_check_cell(l, x, y, exit_cell.lay, exit_cell.x, exit_cell.y, game_map)
+                    problematic_cell = self.bfs_check_cell(layer_id, x, y, exit_cell.lay, exit_cell.x, exit_cell.y, game_map)
                     if problematic_cell is not None:
                         return problematic_cell
         return None

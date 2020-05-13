@@ -4,6 +4,17 @@ import lib.move_strategy as strategy
 import lib.command as command
 
 
+def create_strategy(key):
+    if key == "LEFT":
+        return strategy.ActLeft()
+    elif key == "RIGHT":
+        return strategy.ActRight()
+    elif key == "UP":
+        return strategy.ActUp()
+    elif key == "DOWN":
+        return strategy.ActDown()
+
+
 class Receiver(ABC):
     """Receiver interface"""
 
@@ -20,29 +31,19 @@ class SimpleConsoleReceiver(Receiver):
 
     def handle_string(self):
         inp = sys.stdin.readline().strip()
-        return list(inp.split(" "))
-
-    def create_strategy(self, key):
-        if key == "LEFT":
-            return strategy.ActLeft()
-        elif key == "RIGHT":
-            return strategy.ActRight()
-        elif key == "UP":
-            return strategy.ActUp()
-        elif key == "DOWN":
-            return strategy.ActDown()
+        return inp.split(" ")
 
     def handle_game_command(self):
         inp = self.handle_string()
         if inp[0] == "move":
             if inp[1] in self.destinations:
-                strat = self.create_strategy(inp[1])
+                strat = create_strategy(inp[1])
                 return command.InputMoveCommand(strat)
             else:
                 raise KeyError("Invalid input")
         elif inp[0] == "shoot":
             if inp[1] in self.destinations:
-                strat = self.create_strategy(inp[1])
+                strat = create_strategy(inp[1])
                 return command.InputShootCommand(strat)
             else:
                 raise KeyError("Invalid input")
