@@ -40,12 +40,12 @@ S Stun(2)
 A Armory()  
 R RubberRoom(RIGHT)  
 L RubberRoom(LEFT)  
-T Teleport(1 1 3)  
+T Teleport(0, 0, 2)  
 
 описание почти как в задании. Разница в том, что мы сразу пишем количество карт - n. А далее в n строках описываем карты по отдельности. В описание клетки передаем необходимые параметры:
 Exit(<DESTINATION>)  
 RubberRoom(<DESTINATION>)  
-Teleport(<lay> <x> <y>)  
+Teleport(<lay>, <x>, <y>) // считая с нуля и через запятую!
 Stun(<num>)  
 
 ## Как все устроено:
