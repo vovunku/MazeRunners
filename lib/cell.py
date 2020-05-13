@@ -83,9 +83,12 @@ class RubberRoom(Cell):
 
 
 class Teleport(Cell):
-    def __init__(self, shift_destination, items=None, **kwargs):
+    def __init__(self, shift_lay, shift_x, shift_y, shift_destination=None, items=None, **kwargs):
         super().__init__(items, **kwargs)
         self.shift_destination = shift_destination
+        self.shift_lay = shift_lay
+        self.shift_x = shift_x
+        self.shift_y = shift_y
 
     def get_accessible(self):
         ans = [self.shift_destination]

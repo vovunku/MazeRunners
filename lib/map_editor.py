@@ -3,8 +3,6 @@ import lib.game as game
 from queue import Queue
 
 
-# это ужас, подскажите, пожалуйста, как это чудо переделать
-
 class MapEditor:
     """Module between map manager and other modules"""
 
@@ -23,11 +21,19 @@ class MapEditor:
                 game_map[t].append([])
                 for j in range(cols):
                     cell_id = raw_map[file_it + 1 + 2 * i][2 * j]
-                    new_cell = self.create_cell(types_gen[cell_id][0], types_gen[cell_id][1])
+                    locals_for_eval = {
+                        "LEFT": "LEFT",
+                        "RIGHT": "RIGHT",
+                        "UP": "UP",
+                        "DOWN": "DOWN"
+                    }
+                    new_cell = eval(types_gen[cell_id], cell.__dict__, locals_for_eval)
                     game_map[t][i].append(new_cell)
                     new_cell.set_coords(t, i, j)
-                    if types_gen[cell_id][0] == "Teleport":
-                        shift_for_teleports.append([[t, i, j], types_gen[cell_id][2]])  # [from, to]
+                    if types_gen[cell_id].startswith("Teleport"):
+                        shift_for_teleports.append([[t, i, j], [new_cell.shift_lay,
+                                                                new_cell.shift_x,
+                                                                new_cell.shift_y]])  # [from, to]
 
             # set row siblings
             for i in range(rows):
@@ -54,21 +60,7 @@ class MapEditor:
 
         return game_map
 
-    def create_cell(self, cell_type, *args):  # [0] - type specific; ?[1] - items
-        if cell_type == "Empty":
-            return cell.Empty()
-        elif cell_type == "Stun":
-            return cell.Stun(args[0])  # duration
-        elif cell_type == "RubberRoom":
-            return cell.RubberRoom(args[0])  # exit_destination
-        elif cell_type == "Teleport":
-            return cell.Teleport(args[0])  # shift_destination
-        elif cell_type == "Armory":
-            return cell.Armory()
-        elif cell_type == "Exit":
-            return cell.Exit(args[0])  # exit_destination
-
-    def get_types(self, raw_map):  # needed to be rewritten and probably transferred in another module
+    def get_types(self, raw_map):
         maps_count = int(raw_map[0])
         map_it = 1
         while maps_count > 0:
@@ -78,21 +70,11 @@ class MapEditor:
         types_gen = {}
         while map_it < len(raw_map):
             type_inp = raw_map[map_it]
-            op = type_inp.find('(')
-            cl = type_inp.find(')')
-            if "Teleport" in type_inp:
-                coords = list(map(int, type_inp[op + 1: cl].split(" ")))
-                for i in range(3):
-                    coords[i] -= 1
-                types_gen[type_inp[0]] = [type_inp[2: op], None, coords]
-            elif "RubberRoom" in type_inp or "Exit" in type_inp:
-                types_gen[type_inp[0]] = [type_inp[2: op], type_inp[op + 1: cl]]
-            elif "Stun" in type_inp:
-                types_gen[type_inp[0]] = [type_inp[2: op], int(type_inp[op + 1: cl])]
-            else:
-                types_gen[type_inp[0]] = [type_inp[2: op], None]
+            def_letter = type_inp[0]
+            declaration = type_inp[2:]
+            types_gen[def_letter] = declaration
             map_it += 1
-        types_gen['.'] = ["Empty", None]
+        types_gen['.'] = "Empty()"
         return types_gen
 
     def set_row_siblings(self, left, right, divider):
