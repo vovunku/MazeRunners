@@ -3,19 +3,11 @@ import lib.command as command
 
 class Cell:
     def __init__(self, items=None, **kwargs):
-        if items is None:
-            self.items = []
-        else:
-            self.items = items
+        self.items = items or []
         self.type = "Base"
-        self.left = kwargs.get("LEFT", None)
-        self.right = kwargs.get("RIGHT", None)
-        self.up = kwargs.get("UP", None)
-        self.down = kwargs.get("DOWN", None)
+        self.set_neighbour(**kwargs)
         self.storage = []
-        self.lay = kwargs.get("lay", 0)
-        self.x = kwargs.get("x", 0)
-        self.y = kwargs.get("y", 0)
+        self.set_coords(kwargs.get("lay", 0), kwargs.get("x", 0), kwargs.get("y", 0))
         self.players = set()
 
     def activate(self):
@@ -36,10 +28,10 @@ class Cell:
         return move_strategy.cell_move(self, player_id)
 
     def set_neighbour(self, **kwargs):
-        self.left = kwargs.get("LEFT", None)
-        self.right = kwargs.get("RIGHT", None)
-        self.up = kwargs.get("UP", None)
-        self.down = kwargs.get("DOWN", None)
+        self.left = kwargs.get("LEFT")
+        self.right = kwargs.get("RIGHT")
+        self.up = kwargs.get("UP")
+        self.down = kwargs.get("DOWN")
 
     def __repr__(self):
         return self.type[:2]

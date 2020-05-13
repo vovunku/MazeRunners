@@ -102,7 +102,7 @@ class WallStopCommand(EnvCommand):
         visitor.visit_wall_stop_c(self)
 
     def execute(self, player):
-        pass
+        player.spend_action()
 
 
 class DeathCommand(EnvCommand):
@@ -203,7 +203,7 @@ class BadShootCommand(EnvCommand):
 # ======================================================================================================================
 
 
-class BoardCommand(ABC):
+class GameCommand(ABC):
     """Interface for commands from user to player"""
 
     @abstractmethod
@@ -211,11 +211,11 @@ class BoardCommand(ABC):
         pass
 
     @abstractmethod
-    def execute(self, board, player_id):
+    def execute(self, game, player_id):
         pass
 
 
-class InputMoveCommand(BoardCommand):
+class InputMoveCommand(GameCommand):
     """Command from user to move"""
 
     def __init__(self, move_strategy):
@@ -224,11 +224,11 @@ class InputMoveCommand(BoardCommand):
     def accept(self, visitor):
         visitor.visit_i_move_c(self)
 
-    def execute(self, board, player_id):
-        board.move(player_id, self.move_strategy)
+    def execute(self, game, player_id):
+        game.move(player_id, self.move_strategy)
 
 
-class InputShootCommand(BoardCommand):
+class InputShootCommand(GameCommand):
     """Command for player shooting"""
 
     def __init__(self, move_strategy):
@@ -237,13 +237,13 @@ class InputShootCommand(BoardCommand):
     def accept(self, visitor):
         visitor.visit_i_shoot_c(self)
 
-    def execute(self, board, player_id):
-        board.shoot(player_id, self.move_strategy)
+    def execute(self, game, player_id):
+        game.shoot(player_id, self.move_strategy)
 
 
-class RespawnCommand(BoardCommand):
+class RespawnCommand(GameCommand):
     def accept(self, visitor):
         visitor.visit_respawn_c(self)
 
-    def execute(self, board, player_id):
-        board.respawn(player_id)
+    def execute(self, game, player_id):
+        game.respawn(player_id)

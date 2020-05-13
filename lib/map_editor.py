@@ -1,5 +1,5 @@
 import lib.cell as cell
-import lib.board as board
+import lib.game as game
 from queue import Queue
 
 

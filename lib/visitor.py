@@ -1,9 +1,9 @@
 class GameVisitor:
     """Handle commands in game_loop"""
 
-    def __init__(self, display, board):
+    def __init__(self, display, game):
         self.display = display
-        self.board = board
+        self.game = game
         self.game_running = True
         self.turn_running = True
         self.player = None
@@ -51,10 +51,10 @@ class GameVisitor:
         command.execute(self.player)
 
     def visit_i_move_c(self, command):
-        command.execute(self.board, self.player.id)
+        command.execute(self.game, self.player.id)
 
     def visit_i_shoot_c(self, command):
-        command.execute(self.board, self.player.id)
+        command.execute(self.game, self.player.id)
 
     def visit_i_help_c(self, command):
         self.display.help()
@@ -62,7 +62,7 @@ class GameVisitor:
 
     def visit_respawn_c(self, command):
         self.display.message("{0} has been respawned".format(self.player.id))
-        command.execute(self.board, self.player.id)
+        command.execute(self.game, self.player.id)
 
     def visit_death_c(self, command):
         self.display.message("{0} has died".format(self.player.id))

@@ -41,5 +41,5 @@ class ConsoleDisplay(Display):
         print("{:<80}".format("to see help - \"help\""))
 
     def map_list(self, map_list):
-        for id, board in enumerate(map_list):
-            print("{0} {1:<80}".format(id + 1, board))
+        for id, game in enumerate(map_list):
+            print("{0} {1:<80}".format(id + 1, game))

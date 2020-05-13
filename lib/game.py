@@ -1,7 +1,7 @@
 import lib.command as command
 
 
-class Board:
+class Game:
     """Incapsulate cell storage and move initialisation"""
 
     def __init__(self, game_map, player_dict):
