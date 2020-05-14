@@ -6,7 +6,7 @@ from queue import Queue
 class MapEditor:
     """Module between map manager and other modules"""
 
-    def translate_raw_map(self, raw_map):
+    def parse_raw_map(self, raw_map):
         maps_count = int(raw_map[0])
         types_gen = self.get_types(raw_map)
         file_it = 1

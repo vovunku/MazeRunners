@@ -20,7 +20,7 @@ class MenuFacade:
                 try:
                     game_map = self.editor_body.choose_map()
                 except Exception as err:
-                    self.display.message("Error: {0}".format(str(err)))
+                    self.display.message("Error: {0}".format(err))
                     continue
                 self.game_body.set_map(game_map)
                 self.game_body.game_loop()
