@@ -19,10 +19,10 @@ class TestCellMethods(unittest.TestCase):
         }
 
         self.strategies = {
-            "LEFT": move_strategy.Left(),
-            "RIGHT": move_strategy.Right(),
-            "UP": move_strategy.Up(),
-            "DOWN": move_strategy.Down()
+            "LEFT": move_strategy.DirectionStrategy("LEFT"),
+            "RIGHT": move_strategy.DirectionStrategy("RIGHT"),
+            "UP": move_strategy.DirectionStrategy("UP"),
+            "DOWN": move_strategy.DirectionStrategy("DOWN")
         }
 
         self.dummy_cells = {
