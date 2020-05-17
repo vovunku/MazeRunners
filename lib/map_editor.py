@@ -70,8 +70,7 @@ class MapEditor:
         types_gen = {}
         while map_it < len(raw_map):
             type_inp = raw_map[map_it]
-            def_letter = type_inp[0]
-            declaration = type_inp[2:]
+            def_letter, declaration = type_inp.split(maxsplit=1)
             types_gen[def_letter] = declaration
             map_it += 1
         types_gen['.'] = "Empty()"
@@ -117,8 +116,7 @@ class MapEditor:
         for lay in game_map:
             for row in lay:
                 for unit in row:
-                    if type(unit).__name__ == "Exit":
+                    if isinstance(unit, cell.Exit):
                         exit_cell = unit
-        if exit_cell is None:
-            assert False, "No Exit"
+        assert exit_cell is not None, "There is no Exit on the map"
         return self.bfs_check_map(exit_cell, game_map)

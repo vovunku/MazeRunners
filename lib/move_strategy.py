@@ -12,7 +12,7 @@ class DestinationStrategy:
         cell.release_player(user_id)
         next_cell.handle_player(user_id)
         command_list = next_cell.activate_on_step()
-        command_list.insert(0, command.MoveCommand(type(cell).__name__, self))
+        command_list.insert(0, command.MoveCommand(type(cell), self))
         return command_list
 
     @abstractmethod

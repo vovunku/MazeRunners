@@ -14,8 +14,7 @@ class ConsoleMapManager:
 
     def read_map_file(self, filename):
         with open(filename, 'r') as file:
-            ans_map = [line.strip() for line in file]
-        return ans_map
+            return [line.strip() for line in file]
 
     def get_map_list(self):
         return self.map_list

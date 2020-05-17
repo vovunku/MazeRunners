@@ -1,3 +1,5 @@
+import lib.cell as cell
+
 class GameVisitor:
     """Handle commands in game_loop"""
 
@@ -36,7 +38,7 @@ class GameVisitor:
     def visit_move_c(self, command):
         self.display.message(
             "{0} successfully moved {1}".format(self.player.id, str(command.move_strategy).lower()))
-        if command.cell_type == "RubberRoom":
+        if command.cell_type is cell.RubberRoom:
             self.display.message("{0} successfully exited Rubber Room".format(self.player.id))
         command.execute(self.player)
 

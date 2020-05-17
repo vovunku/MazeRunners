@@ -9,13 +9,13 @@ class GameFacade:
     def __init__(self, receiver, display):
         self.receiver = receiver
         self.display = display
-        self.Game = None
+        self.game = None
         self.players = None
         self.game_map = None
 
     def game_loop(self):
         self.initialize()
-        game_visitor = visitor.GameVisitor(self.display, self.Game)
+        game_visitor = visitor.GameVisitor(self.display, self.game)
         self.display.help()
         while game_visitor.game_running:
             for player_id, player in self.players.items():
@@ -26,7 +26,7 @@ class GameFacade:
     def make_turn(self, game_visitor, player_id, player):
         self.display.message("{0} player turn started".format(player_id))
         game_visitor.set_player(player)
-        self.Game.start_turn(player_id)
+        self.game.start_turn(player_id)
         order_queue = player.command_queue
         game_visitor.turn_running = True
         while game_visitor.turn_running:
@@ -82,7 +82,7 @@ class GameFacade:
                     self.display.message("Incorrect input")
                     self.display.message(str(err))
         self.players = players
-        self.Game = game.Game(self.game_map, players)
+        self.game = game.Game(self.game_map, players)
 
     def set_map(self, game_map):
         self.game_map = game_map
