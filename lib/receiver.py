@@ -6,13 +6,13 @@ import lib.command as command
 
 def create_strategy(key):
     if key == "LEFT":
-        return strategy.ActLeft()
+        return strategy.Left()
     elif key == "RIGHT":
-        return strategy.ActRight()
+        return strategy.Right()
     elif key == "UP":
-        return strategy.ActUp()
+        return strategy.Up()
     elif key == "DOWN":
-        return strategy.ActDown()
+        return strategy.Down()
 
 
 class Receiver(ABC):

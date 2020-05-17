@@ -5,6 +5,9 @@ import lib.command as command
 class DestinationStrategy:
     """To avoid copypasta(strategy pattern)"""
 
+    def __init__(self):
+        self.destination_type = type(self).__name__.upper()
+
     def cell_move(self, cell, user_id):
         next_cell = self.next_cell(cell)
         if next_cell is None:
@@ -16,59 +19,37 @@ class DestinationStrategy:
         return command_list
 
     @abstractmethod
-    def player_move(self, player):
+    def get_coord_diff(self):
         pass
 
-    @abstractmethod
-    def next_cell(self, cell):
-        pass
-
-
-class ActLeft(DestinationStrategy):
-
     def player_move(self, player):
+        x_diff, y_diff = self.get_coord_diff()
         lay, x, y = player.get_coords()
-        player.set_coords(lay, x, y - 1)
+        player.set_coords(lay, x + x_diff, y + y_diff)
 
     def next_cell(self, cell):
-        return cell.left
-
-    def __str__(self):
-        return "LEFT"
+        return getattr(cell, self.destination_type.lower())
 
 
-class ActRight(DestinationStrategy):
+class Left(DestinationStrategy):
 
-    def player_move(self, player):
-        lay, x, y = player.get_coords()
-        player.set_coords(lay, x, y + 1)
+    def get_coord_diff(self):
+        return 0, -1
 
-    def next_cell(self, cell):
-        return cell.right
 
-    def __str__(self):
-        return "RIGHT"
+class Right(DestinationStrategy):
 
-class ActUp(DestinationStrategy):
+    def get_coord_diff(self):
+        return 0, 1
 
-    def player_move(self, player):
-        lay, x, y = player.get_coords()
-        player.set_coords(lay, x - 1, y)
 
-    def next_cell(self, cell):
-        return cell.up
+class Up(DestinationStrategy):
 
-    def __str__(self):
-        return "UP"
+    def get_coord_diff(self):
+        return -1, 0
 
-class ActDown(DestinationStrategy):
 
-    def player_move(self, player):
-        lay, x, y = player.get_coords()
-        player.set_coords(lay, x + 1, y)
+class Down(DestinationStrategy):
 
-    def next_cell(self, cell):
-        return cell.down
-
-    def __str__(self):
-        return "DOWN"
+    def get_coord_diff(self):
+        return 1, 0

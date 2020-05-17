@@ -37,19 +37,19 @@ class GameVisitor:
 
     def visit_move_c(self, command):
         self.display.message(
-            "{0} successfully moved {1}".format(self.player.id, str(command.move_strategy).lower()))
+            "{0} successfully moved {1}".format(self.player.id, command.move_strategy.destination_type.lower()))
         if command.cell_type is cell.RubberRoom:
             self.display.message("{0} successfully exited Rubber Room".format(self.player.id))
         command.execute(self.player)
 
     def visit_false_move_c(self, command):
         self.display.message(
-            "{0} successfully moved {1}".format(self.player.id, str(command.move_strategy).lower()))
+            "{0} successfully moved {1}".format(self.player.id, command.move_strategy.destination_type.lower()))
         command.execute(self.player)
 
     def visit_wall_stop_c(self, command):
         self.display.message(
-            "{0} didn't move {1} because of wall".format(self.player.id, str(command.move_strategy).lower()))
+            "{0} didn't move {1} because of wall".format(self.player.id, command.move_strategy.destination_type.lower()))
         command.execute(self.player)
 
     def visit_i_move_c(self, command):
