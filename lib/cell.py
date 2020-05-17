@@ -71,7 +71,7 @@ class RubberRoom(Cell):
         self.exit_destination = exit_destination
 
     def move(self, player_id, move_strategy):
-        if move_strategy.destination_type == self.exit_destination:
+        if move_strategy.direction_type == self.exit_destination:
             return move_strategy.cell_move(self, player_id)
         return [command.FalseMoveCommand(move_strategy)]
 
@@ -122,7 +122,7 @@ class Exit(Cell):
         self.exit_destination = exit_destination
 
     def move(self, player_id, move_strategy):
-        if move_strategy.destination_type == self.exit_destination:
+        if move_strategy.direction_type == self.exit_destination:
             self.release_player(player_id)
             return [command.ExitCommand()]
         return super().move(player_id, move_strategy)

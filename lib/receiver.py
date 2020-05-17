@@ -5,14 +5,7 @@ import lib.command as command
 
 
 def create_strategy(key):
-    if key == "LEFT":
-        return strategy.Left()
-    elif key == "RIGHT":
-        return strategy.Right()
-    elif key == "UP":
-        return strategy.Up()
-    elif key == "DOWN":
-        return strategy.Down()
+    return strategy.DirectionStrategy(key)
 
 
 class Receiver(ABC):

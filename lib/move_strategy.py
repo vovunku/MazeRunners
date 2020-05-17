@@ -2,11 +2,25 @@ from abc import ABC, abstractmethod
 import lib.command as command
 
 
-class DestinationStrategy:
+class DirectionStrategy:
     """To avoid copypasta(strategy pattern)"""
 
-    def __init__(self):
-        self.destination_type = type(self).__name__.upper()
+    player_move_map = {
+        "LEFT": (0, -1),
+        "RIGHT": (0, 1),
+        "UP": (-1, 0),
+        "DOWN": (1, 0)
+    }
+
+    cell_move_map = {
+        "LEFT": "left",
+        "RIGHT": "right",
+        "UP": "up",
+        "DOWN": "down"
+    }
+
+    def __init__(self, direction_type):
+        self.direction_type = direction_type
 
     def cell_move(self, cell, user_id):
         next_cell = self.next_cell(cell)
@@ -18,38 +32,11 @@ class DestinationStrategy:
         command_list.insert(0, command.MoveCommand(type(cell), self))
         return command_list
 
-    @abstractmethod
-    def get_coord_diff(self):
-        pass
-
     def player_move(self, player):
-        x_diff, y_diff = self.get_coord_diff()
+        x_diff, y_diff = self.player_move_map[self.direction_type]
         lay, x, y = player.get_coords()
         player.set_coords(lay, x + x_diff, y + y_diff)
 
     def next_cell(self, cell):
-        return getattr(cell, self.destination_type.lower())
+        return getattr(cell, self.cell_move_map[self.direction_type])
 
-
-class Left(DestinationStrategy):
-
-    def get_coord_diff(self):
-        return 0, -1
-
-
-class Right(DestinationStrategy):
-
-    def get_coord_diff(self):
-        return 0, 1
-
-
-class Up(DestinationStrategy):
-
-    def get_coord_diff(self):
-        return -1, 0
-
-
-class Down(DestinationStrategy):
-
-    def get_coord_diff(self):
-        return 1, 0
