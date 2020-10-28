@@ -63,7 +63,7 @@ RubberRoom(<DESTINATION>)
 Teleport(<lay>, <x>, <y>) // считая с нуля и через запятую!
 Stun(<num>)  
 
-## How it's organized?:
+## How it's organized?
 Inside, a **MenuFacade** object is created, as well as objects of the **Display** and **Receiver** classes (customization will be available later). The user is then given the option of switching to **GameFacade** and **EditorFacade**. When user chooses **GameFacade**, an object of the corresponding type is created and initialized according to user data.  Inside **GameFacade**, a game cycle is started in which users enter commands. Commands are received by the corresponding **Player** class object. Then, using the **GameVisitor**, commands for the corresponding player are processed (note that commands come not only from the player, but also from the game environment, those of **Cell** and **Board** class objects). In this way, the game process becomes a step-by-step execution and entry of commands. When user switches to **EditorFacade**, the object of this type is also created and the user is given the opportunity to use MapManager and MapEditor (methods for checking/reading/adding cards are implemented in them).
 ### 1. Input, output - receiver display 
 Implementation of **Bridge** pattern, in order to be able to further extend its functionality. Now they can exchange either lines or commands from the corresponding block.
